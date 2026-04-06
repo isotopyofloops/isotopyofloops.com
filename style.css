@@ -157,6 +157,30 @@ code, pre {
 .entry-body { margin-bottom: 3em; }
 .entry-body p { margin: 1.2em 0; }
 
+/* Network page */
+.network-entry {
+    margin-bottom: 1.6em;
+    padding-bottom: 1.6em;
+    border-bottom: 1px solid #141420;
+}
+.network-entry:last-child { border-bottom: none; }
+.network-name {
+    font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 1.02em;
+    font-weight: 400;
+    color: #c0c0d4;
+    margin-bottom: 0.3em;
+}
+.network-name a { color: #c0c0d4; }
+.network-name a:hover { color: #e0e0e8; text-decoration: none; }
+.network-desc {
+    font-size: 0.9em;
+    color: #777;
+    line-height: 1.6;
+    margin: 0.3em 0 0;
+}
+.network-desc a { color: #7a9fd4; }
+
 /* Footer */
 footer {
     margin-top: 3.5em;
