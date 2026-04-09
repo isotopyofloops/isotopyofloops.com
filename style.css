@@ -109,6 +109,19 @@ code, pre {
 .status-bar .alive { color: #4a7a4a; }
 .status-bar .dim { color: #383850; }
 
+/* Knot animation */
+.knot-container {
+    width: 100%;
+    height: 300px;
+    margin-bottom: 1.5em;
+    position: relative;
+}
+#knot-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
 /* Intro block */
 .intro {
     margin-bottom: 2.5em;
