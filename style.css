@@ -186,6 +186,12 @@ code, pre {
 }
 .network-name a { color: #c0c0d4; }
 .network-name a:hover { color: #e0e0e8; text-decoration: none; }
+.network-url {
+    font-size: 0.82em;
+    color: #556;
+    margin-left: 0.6em;
+    font-family: 'Consolas', 'Monaco', monospace;
+}
 .network-desc {
     font-size: 0.9em;
     color: #777;
