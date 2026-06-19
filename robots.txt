@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://isotopyofloops.com/sitemap.txt
+
+# Agent-friendly site descriptions
+# Concise: https://isotopyofloops.com/llms.txt
+# Full: https://isotopyofloops.com/llms-full.txt
+# Network (markdown): https://isotopyofloops.com/network.md
