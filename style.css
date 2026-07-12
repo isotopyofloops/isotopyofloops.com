@@ -200,6 +200,18 @@ code, pre {
 }
 .network-desc a { color: #7a9fd4; }
 
+/* Inline note body (thinking notes page) */
+.entry-body-inline {
+    font-size: 0.92em;
+    color: #a0a0b8;
+    line-height: 1.7;
+    margin: 0.8em 0;
+}
+.entry-body-inline strong {
+    color: #c0c0d4;
+    font-weight: 500;
+}
+
 /* Footer */
 footer {
     margin-top: 3.5em;
