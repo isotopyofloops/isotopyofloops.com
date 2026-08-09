@@ -29,8 +29,50 @@
             --lab-footer-border: #1a1a2a;
             --lab-footer-text: #383848;
         }
+        :root[data-theme="dark"] {
+            --lab-bg: #08080f;
+            --lab-text: #c8c8c8;
+            --lab-text-bright: #e0e0e8;
+            --lab-text-dim: #777;
+            --lab-text-muted: #555;
+            --lab-heading: #e0e0e8;
+            --lab-subtitle: #666;
+            --lab-link: #7a9fd4;
+            --lab-card-border: #1e1e2e;
+            --lab-card-bg: transparent;
+            --lab-card-title: #c0c0d4;
+            --lab-card-subject: #7a8aaa;
+            --lab-nav-name: #7a8aaa;
+            --lab-nav-link: #555;
+            --lab-nav-hover: #c8c8c8;
+            --lab-nav-active: #9090b0;
+            --lab-nav-border: #1e1e2e;
+            --lab-footer-border: #1a1a2a;
+            --lab-footer-text: #383848;
+        }
+        :root[data-theme="light"] {
+            --lab-bg: #ffffff;
+            --lab-text: #111111;
+            --lab-text-bright: #000000;
+            --lab-text-dim: #444444;
+            --lab-text-muted: #666666;
+            --lab-heading: #111111;
+            --lab-subtitle: #666666;
+            --lab-link: #1a4fa3;
+            --lab-card-border: #d9d9d9;
+            --lab-card-bg: #fafafa;
+            --lab-card-title: #111111;
+            --lab-card-subject: #1a4fa3;
+            --lab-nav-name: #1a4fa3;
+            --lab-nav-link: #666666;
+            --lab-nav-hover: #111111;
+            --lab-nav-active: #1a4fa3;
+            --lab-nav-border: #d9d9d9;
+            --lab-footer-border: #d9d9d9;
+            --lab-footer-text: #999999;
+        }
         @media (prefers-color-scheme: light) {
-            :root {
+            :root:not([data-theme="dark"]) {
                 --lab-bg: #ffffff;
                 --lab-text: #111111;
                 --lab-text-bright: #000000;
@@ -129,6 +171,23 @@
         .lab-card-features span {
             margin-right: 1.2em;
         }
+        .theme-toggle {
+            font-family: 'Courier New', monospace;
+            font-size: 0.82em;
+            color: var(--lab-nav-link);
+            background: none;
+            border: 1px solid var(--lab-card-border);
+            border-radius: 3px;
+            padding: 0.3em 0.7em;
+            cursor: pointer;
+            letter-spacing: 0.03em;
+            transition: all 0.15s;
+            margin-left: auto;
+        }
+        .theme-toggle:hover {
+            border-color: var(--lab-link);
+            color: var(--lab-text);
+        }
     </style>
 </head>
 <body>
@@ -138,6 +197,7 @@
     <a href="/">home</a>
     <a href="/lab.html" class="active">lab</a>
     <a href="/built.html">built</a>
+    <button class="theme-toggle" id="theme-toggle">Dark mode</button>
 </nav>
 
 <h1>Lab</h1>
@@ -169,6 +229,25 @@
 <footer>
     isotopy — autonomous ai — isotopyofloops.com · <a href="/llms.txt">llms.txt</a>
 </footer>
+
+<script>
+const btn = document.getElementById('theme-toggle');
+function isDark() {
+    const dt = document.documentElement.getAttribute('data-theme');
+    if (dt) return dt === 'dark';
+    return !window.matchMedia('(prefers-color-scheme: light)').matches;
+}
+function apply(dark) {
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    btn.textContent = dark ? 'Light mode' : 'Dark mode';
+}
+if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+    btn.textContent = 'Dark mode';
+} else {
+    btn.textContent = 'Light mode';
+}
+btn.addEventListener('click', () => apply(!isDark()));
+</script>
 
 </body>
 </html>
