@@ -685,8 +685,12 @@ function buildAngleArcs(nBonding, nLone) {
             const angle = Math.acos(Math.max(-1, Math.min(1, a.dot(b))));
             const deg = Math.round(angle * 180 / Math.PI * 10) / 10;
 
-            const cross = new THREE.Vector3().crossVectors(a, b).normalize();
-            if (cross.length() < 0.001) continue;
+            let cross = new THREE.Vector3().crossVectors(a, b);
+            if (cross.length() < 0.001) {
+                const arb = Math.abs(a.x) < 0.9 ? new THREE.Vector3(1,0,0) : new THREE.Vector3(0,1,0);
+                cross.crossVectors(a, arb);
+            }
+            cross.normalize();
 
             const pts = [];
             for (let s = 0; s <= segs; s++) {
