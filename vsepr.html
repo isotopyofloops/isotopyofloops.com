@@ -206,6 +206,35 @@
             color: #e0e0e8;
         }
 
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            gap: 0.8em;
+            margin-top: 0.4em;
+        }
+        .toggle-btn {
+            font-family: 'Courier New', monospace;
+            font-size: 0.75em;
+            color: #7a8aaa;
+            background: #12121e;
+            border: 1px solid #1e1e2e;
+            border-radius: 3px;
+            padding: 0.4em 0.8em;
+            cursor: pointer;
+            letter-spacing: 0.04em;
+            transition: all 0.15s;
+            text-transform: uppercase;
+        }
+        .toggle-btn:hover {
+            border-color: #7a9fd4;
+            color: #c0c0d4;
+        }
+        .toggle-btn.on {
+            border-color: #7a9fd4;
+            background: #1a1a30;
+            color: #e0e0e8;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .vsepr-layout {
@@ -296,6 +325,12 @@
                 <div class="legend-item"><div class="legend-dot" style="background:#5588cc;"></div> Central</div>
                 <div class="legend-item"><div class="legend-dot" style="background:#c0c0d4;"></div> Bonding</div>
                 <div class="legend-item"><div class="legend-dot" style="background:#7a5a9f; opacity:0.7;"></div> Lone pair</div>
+            </div>
+        </div>
+
+        <div class="info-block">
+            <div class="toggle-row">
+                <button class="toggle-btn" id="angle-toggle">Show angles</button>
             </div>
         </div>
 
@@ -432,6 +467,7 @@ controls.minDistance = 2;
 controls.maxDistance = 10;
 controls.autoRotate = true;
 controls.autoRotateSpeed = 0.8;
+controls.addEventListener('start', () => { controls.autoRotate = false; });
 
 // Lighting
 const ambientLight = new THREE.AmbientLight(0x404060, 0.6);
@@ -457,10 +493,83 @@ const loneGeom = new THREE.SphereGeometry(0.22, 24, 24);
 const stickGeom = new THREE.CylinderGeometry(0.04, 0.04, 1, 8);
 
 const molGroup = new THREE.Group();
+const anglesGroup = new THREE.Group();
 scene.add(molGroup);
+scene.add(anglesGroup);
 
 let currentBonding = 4;
 let currentLone = 0;
+let showAngles = false;
+
+const arcMat = new THREE.LineBasicMaterial({ color: 0xd4a843, linewidth: 1 });
+
+function makeAngleLabel(text) {
+    const c = document.createElement('canvas');
+    c.width = 128; c.height = 48;
+    const ctx = c.getContext('2d');
+    ctx.clearRect(0, 0, 128, 48);
+    ctx.font = 'bold 28px Courier New, monospace';
+    ctx.fillStyle = '#d4a843';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, 64, 24);
+    const tex = new THREE.CanvasTexture(c);
+    tex.needsUpdate = true;
+    const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthTest: false });
+    const sprite = new THREE.Sprite(mat);
+    sprite.scale.set(0.5, 0.19, 1);
+    return sprite;
+}
+
+function buildAngleArcs(nBonding, nLone) {
+    while (anglesGroup.children.length) anglesGroup.remove(anglesGroup.children[0]);
+    if (!showAngles) return;
+
+    const steric = nBonding + nLone;
+    if (steric < 2 || steric > 6) return;
+
+    const positions = electronPositions(steric);
+    const loneIndices = new Set(assignLonePairs(steric, nLone));
+    const bondDirs = [];
+    positions.forEach((dir, i) => {
+        if (!loneIndices.has(i)) bondDirs.push(dir.clone().normalize());
+    });
+
+    if (bondDirs.length < 2) return;
+
+    const arcRadius = 0.45;
+    const segs = 24;
+
+    for (let i = 0; i < bondDirs.length; i++) {
+        for (let j = i + 1; j < bondDirs.length; j++) {
+            const a = bondDirs[i];
+            const b = bondDirs[j];
+            const angle = Math.acos(Math.max(-1, Math.min(1, a.dot(b))));
+            const deg = Math.round(angle * 180 / Math.PI * 10) / 10;
+
+            const cross = new THREE.Vector3().crossVectors(a, b).normalize();
+            if (cross.length() < 0.001) continue;
+
+            const pts = [];
+            for (let s = 0; s <= segs; s++) {
+                const t = s / segs;
+                const q = new THREE.Quaternion().setFromAxisAngle(cross, angle * t);
+                const pt = a.clone().applyQuaternion(q).multiplyScalar(arcRadius);
+                pts.push(pt);
+            }
+
+            const geom = new THREE.BufferGeometry().setFromPoints(pts);
+            const arc = new THREE.Line(geom, arcMat);
+            anglesGroup.add(arc);
+
+            const mid = new THREE.Quaternion().setFromAxisAngle(cross, angle * 0.5);
+            const labelPos = a.clone().applyQuaternion(mid).multiplyScalar(arcRadius + 0.18);
+            const label = makeAngleLabel(deg + '°');
+            label.position.copy(labelPos);
+            anglesGroup.add(label);
+        }
+    }
+}
 
 function buildMolecule(nBonding, nLone) {
     while (molGroup.children.length) molGroup.remove(molGroup.children[0]);
@@ -553,6 +662,7 @@ function update() {
     const nBonding = currentBonding;
     const nLone = currentLone;
     buildMolecule(nBonding, nLone);
+    buildAngleArcs(nBonding, nLone);
     updateInfo(nBonding, nLone);
     updatePresetHighlight(nBonding, nLone);
 }
@@ -601,6 +711,15 @@ PRESETS.forEach(p => {
         update();
     });
     presetsEl.appendChild(btn);
+});
+
+// Angle toggle
+const angleToggle = document.getElementById('angle-toggle');
+angleToggle.addEventListener('click', () => {
+    showAngles = !showAngles;
+    angleToggle.classList.toggle('on', showAngles);
+    angleToggle.textContent = showAngles ? 'Hide angles' : 'Show angles';
+    buildAngleArcs(currentBonding, currentLone);
 });
 
 // Resize
