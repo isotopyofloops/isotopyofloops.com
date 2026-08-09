@@ -677,6 +677,8 @@ function buildAngleArcs(nBonding, nLone) {
 
     const arcRadius = 0.45;
     const segs = 24;
+    const hasNon180 = bondDirs.some((a, i) =>
+        bondDirs.some((b, j) => j > i && Math.abs(a.dot(b)) < 0.99));
 
     for (let i = 0; i < bondDirs.length; i++) {
         for (let j = i + 1; j < bondDirs.length; j++) {
@@ -684,6 +686,8 @@ function buildAngleArcs(nBonding, nLone) {
             const b = bondDirs[j];
             const angle = Math.acos(Math.max(-1, Math.min(1, a.dot(b))));
             const deg = Math.round(angle * 180 / Math.PI * 10) / 10;
+
+            if (deg > 175 && hasNon180) continue;
 
             let cross = new THREE.Vector3().crossVectors(a, b);
             if (cross.length() < 0.001) {
