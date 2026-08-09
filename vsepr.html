@@ -353,25 +353,7 @@
             border-top: none;
         }
 
-        /* Theme toggle */
-        .theme-toggle {
-            position: absolute;
-            top: 1em;
-            right: 1em;
-            font-family: 'Courier New', monospace;
-            font-size: 0.78em;
-            color: var(--label);
-            background: var(--btn-bg);
-            border: 1px solid var(--border);
-            border-radius: 3px;
-            padding: 0.35em 0.7em;
-            cursor: pointer;
-            letter-spacing: 0.04em;
-            transition: all 0.15s;
-            z-index: 10;
-            text-transform: uppercase;
-        }
-        .theme-toggle:hover { border-color: var(--accent); color: var(--text); }
+        /* Theme toggle — uses .toggle-btn styles, no extra rules needed */
 
         /* Responsive */
         @media (max-width: 768px) {
@@ -408,7 +390,6 @@
 
 <div class="vsepr-layout">
     <div class="viewer-panel">
-        <button class="theme-toggle" id="theme-toggle">light</button>
         <canvas id="mol-canvas"></canvas>
         <div class="geometry-label">
             <div class="electron-geom" id="electron-geom-label">electron geometry: tetrahedral</div>
@@ -456,6 +437,7 @@
         <div class="info-block">
             <div class="toggle-row">
                 <button class="toggle-btn" id="angle-toggle">Show angles</button>
+                <button class="toggle-btn" id="theme-toggle">light</button>
             </div>
         </div>
 
@@ -507,6 +489,9 @@
 <script type="module">
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { Line2 } from 'three/addons/lines/Line2.js';
+import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
+import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
 
 const GEOM_DATA = {
     '2_0': { electronGeom: 'Linear', molGeom: 'Linear', angles: '180°', hybrid: 'sp', axe: 'AX₂E₀', example: 'CO₂, BeCl₂' },
@@ -641,7 +626,9 @@ let currentBonding = 4;
 let currentLone = 0;
 let showAngles = false;
 
-const arcMat = new THREE.LineBasicMaterial({ color: 0xcc4455, linewidth: 1 });
+const arcMat = new LineMaterial({ color: 0xcc4455, linewidth: 3, worldUnits: false });
+arcMat.resolution.set(window.innerWidth, window.innerHeight);
+window.addEventListener('resize', () => arcMat.resolution.set(window.innerWidth, window.innerHeight));
 
 function makeAngleLabel(text) {
     const c = document.createElement('canvas');
@@ -698,8 +685,12 @@ function buildAngleArcs(nBonding, nLone) {
                 pts.push(pt);
             }
 
-            const geom = new THREE.BufferGeometry().setFromPoints(pts);
-            const arc = new THREE.Line(geom, arcMat);
+            const flatPos = [];
+            pts.forEach(p => flatPos.push(p.x, p.y, p.z));
+            const geom = new LineGeometry();
+            geom.setPositions(flatPos);
+            const arc = new Line2(geom, arcMat);
+            arc.computeLineDistances();
             anglesGroup.add(arc);
 
             const mid = new THREE.Quaternion().setFromAxisAngle(cross, angle * 0.5);
@@ -969,7 +960,7 @@ function applyTheme(dark) {
     }
 }
 if (window.matchMedia('(prefers-color-scheme: light)').matches) applyTheme(false);
-themeBtn.addEventListener('click', () => applyTheme(isDark()));
+themeBtn.addEventListener('click', () => applyTheme(!isDark()));
 
 // Animate
 function animate() {
