@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ch 14: Attention and Higher Cognition | Brain Atlas — isotopy</title>
+<style>
+  :root {
+    --bg: #f6f7f9;
+    --bg-card: #ffffff;
+    --bg-render: #1a1c22;
+    --text: #2a2d32;
+    --text-muted: #6b7280;
+    --border: #e2e5ea;
+    --parietal: #c7b563;
+    --frontal: #6baecb;
+    --temporal: #5cc77a;
+    --thalamus: #b86ba6;
+    --colliculus: #8a7050;
+    --cingulate: #9999cc;
+    --occipital: #a86bc7;
+    --insula: #80b3a6;
+    --accent: #6baecb;
+    --accent-light: rgba(107, 174, 203, 0.12);
+    --info: #c7b563;
+    --info-light: rgba(199, 181, 99, 0.12);
+    --warn: #e07850;
+    --warn-light: rgba(224, 120, 80, 0.12);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #16181d;
+      --bg-card: #1e2128;
+      --text: #e1e4e8;
+      --text-muted: #8b949e;
+      --border: #2d333b;
+      --accent-light: rgba(107, 174, 203, 0.15);
+      --info-light: rgba(199, 181, 99, 0.15);
+      --warn-light: rgba(224, 120, 80, 0.15);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #f6f7f9; --bg-card: #ffffff; --text: #2a2d32;
+    --text-muted: #6b7280; --border: #e2e5ea;
+    --accent-light: rgba(107, 174, 203, 0.12);
+    --info-light: rgba(199, 181, 99, 0.12);
+    --warn-light: rgba(224, 120, 80, 0.12);
+  }
+  :root[data-theme="dark"] {
+    --bg: #16181d; --bg-card: #1e2128; --text: #e1e4e8;
+    --text-muted: #8b949e; --border: #2d333b;
+    --accent-light: rgba(107, 174, 203, 0.15);
+    --info-light: rgba(199, 181, 99, 0.15);
+    --warn-light: rgba(224, 120, 80, 0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+  header {
+    padding: 40px 0 8px;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .back-link {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  .chapter-num {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+  }
+  header h1 {
+    width: 100%;
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-top: 4px;
+  }
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 32px;
+    max-width: 640px;
+  }
+
+  .hero-view { margin-bottom: 40px; }
+  .view-img-wrap {
+    background: var(--bg-render);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  .view-img-wrap img {
+    max-width: 100%;
+    height: auto;
+    max-height: 480px;
+  }
+  .view-caption {
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    margin-top: 8px;
+    text-align: center;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+  h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    margin-top: 32px;
+  }
+
+  .structure-section { margin-bottom: 36px; }
+  .structure-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+  .structure-card-body { padding: 20px 24px; }
+  .structure-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .structure-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .structure-aka {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+  .structure-desc {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  .structure-desc strong { font-weight: 600; }
+
+  .key-concept {
+    background: var(--info-light);
+    border-left: 3px solid var(--info);
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+  .key-concept .label {
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--info);
+    margin-bottom: 4px;
+  }
+
+  .clinical-note {
+    background: var(--warn-light);
+    border-left: 3px solid var(--warn);
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+  .clinical-note .label {
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--warn);
+    margin-bottom: 4px;
+  }
+
+  .exam-note {
+    background: var(--accent-light);
+    border-left: 3px solid var(--accent);
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+  .exam-note .label {
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .views-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .views-pair .view-img-wrap img { max-height: 360px; }
+
+  .pathway-section { margin-bottom: 40px; }
+  .pathway-steps {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  .pathway-step {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-align: center;
+    min-width: 120px;
+  }
+  .pathway-step.highlighted {
+    border-color: var(--accent);
+    background: var(--accent-light);
+  }
+  .pathway-step small {
+    display: block;
+    font-weight: 400;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+  .pathway-arrow {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    padding: 0 6px;
+  }
+
+  .network-types {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .network-type-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+  }
+  .network-type-card h4 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .network-type-card p {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+  .network-type-card .brain-region {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-top: 8px;
+  }
+
+  .vocab-list { margin-bottom: 40px; }
+  .vocab-list dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 6px 16px;
+    font-size: 0.88rem;
+  }
+  .vocab-list dt {
+    font-weight: 600;
+    text-align: right;
+    padding-top: 2px;
+  }
+  .vocab-list dd {
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+
+  .case-study {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .case-study .patient-name {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .case-study .patient-detail {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+  .case-study p {
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+    margin: 16px 0;
+  }
+  .table-wrap table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  .table-wrap th, .table-wrap td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .table-wrap th {
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    background: var(--bg-card);
+  }
+  .table-wrap td {
+    line-height: 1.55;
+  }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 0;
+    margin-top: 24px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    line-height: 1.7;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.4rem; }
+    .views-pair { grid-template-columns: 1fr; }
+    .network-types { grid-template-columns: 1fr; }
+    .pathway-steps { flex-direction: column; }
+    .pathway-arrow { transform: rotate(90deg); }
+    .vocab-list dl { grid-template-columns: 1fr; }
+    .vocab-list dt { text-align: left; }
+  }
+  .site-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5em;
+    padding: 12px 24px;
+    border-bottom: 1px solid var(--border);
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+  }
+  .site-nav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .site-nav a:hover { color: var(--text); }
+  .site-nav .site-name {
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="/" class="site-name">isotopy</a>
+  <a href="/lab.html">lab</a>
+  <a href="/brain-atlas/">atlas</a>
+</nav>
+
+<div class="container">
+  <header>
+    <a href="index.html" class="back-link">&larr; Atlas home</a>
+    <a href="views.html" class="back-link">All Views</a>
+    <div class="chapter-num">Chapter 14</div>
+    <h1>Attention and Higher Cognition</h1>
+  </header>
+  <p class="subtitle">The neural systems that control attention, produce conscious experience, and support executive function. Two cortical networks (dorsal frontoparietal and right temporoparietal) work with subcortical structures to direct the attentional spotlight, while the prefrontal cortex orchestrates goal-directed behavior.</p>
+
+  <div class="hero-view">
+    <div class="view-img-wrap">
+      <img src="renders/ch14_lateral_left.png" alt="Left lateral view highlighting frontal, parietal, temporal, and occipital regions involved in attention">
+    </div>
+    <div class="view-caption">Left lateral view. Frontal lobe (blue), parietal lobe (gold), temporal regions (green), occipital cortex (purple), and cingulate gyrus (lavender) highlighted. These cortical regions form the major attention and executive networks.</div>
+  </div>
+
+  <!-- TWO FORMS OF ATTENTION -->
+  <div class="structure-section">
+    <h2>Two Forms of Attention</h2>
+    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;"><strong>Selective attention</strong> is the process of focusing on specific stimuli for enhanced processing. It acts as a filter, protecting the brain from being overwhelmed. Two complementary systems direct it:</p>
+
+    <div class="network-types">
+      <div class="network-type-card">
+        <h4>Voluntary (Endogenous)</h4>
+        <p>Conscious, top-down directing of attention toward stimuli based on our goals. Studied with Posner's symbolic cuing task: valid cues speed reaction time, invalid cues slow it. Controlled by the dorsal frontoparietal network.</p>
+        <span class="brain-region" style="background: var(--accent-light); color: var(--frontal);">Frontal Eye Field + Intraparietal Sulcus</span>
+      </div>
+      <div class="network-type-card">
+        <h4>Reflexive (Exogenous)</h4>
+        <p>Involuntary, bottom-up capture of attention by sudden or salient events (flashes, bangs, movement). Studied with peripheral spatial cuing. Shows <em>inhibition of return</em>: after ~200 ms, attention resists returning to an already-inspected location.</p>
+        <span class="brain-region" style="background: rgba(92, 199, 122, 0.15); color: var(--temporal);">Right Temporoparietal Junction</span>
+      </div>
+    </div>
+
+    <div class="exam-note">
+      <div class="label">Attention as a limited resource</div>
+      Divided-attention tasks confirm that we cannot effectively attend to more than one complex stimulus at a time. <strong>Inattentional blindness</strong> demonstrates this dramatically: over 80% of radiologists screening CT scans for lung cancer failed to notice a gorilla image inserted into a scan (Drew et al., 2013). Even life-or-death stimuli go unnoticed when attention is focused elsewhere.
+    </div>
+
+    <div class="key-concept">
+      <div class="label">The binding problem</div>
+      Different features of an object (color, shape, motion) are processed by different brain regions. <strong>Conjunction search</strong>, searching for an object defined by a combination of features, requires focused attention to bind these features into a unified percept. Simple <strong>feature search</strong> (one distinguishing attribute) produces automatic "pop-out" without effortful attention.
+    </div>
+  </div>
+
+  <!-- ERP MARKERS OF ATTENTION -->
+  <div class="structure-section">
+    <h2>Neural Signatures of Attention (ERPs)</h2>
+    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px;">Event-related potentials (ERPs), averaged EEG responses to repeated stimuli, track attention effects with millisecond precision. Different ERP components mark different stages of attentional processing:</p>
+
+    <div class="pathway-section">
+      <div class="pathway-steps">
+        <div class="pathway-step highlighted">
+          P1 (70&ndash;100 ms)
+          <small>Visual spatial attention</small>
+        </div>
+        <div class="pathway-arrow">&rarr;</div>
+        <div class="pathway-step highlighted">
+          N1 (100&ndash;150 ms)
+          <small>Auditory attention</small>
+        </div>
+        <div class="pathway-arrow">&rarr;</div>
+        <div class="pathway-step">
+          N2pc
+          <small>Visual search / pop-out</small>
+        </div>
+        <div class="pathway-arrow">&rarr;</div>
+        <div class="pathway-step">
+          P3 (300+ ms)
+          <small>Late selection / meaning</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-note">
+      <div class="label">Key distinction</div>
+      The <strong>auditory N1 effect</strong> is larger for attended vs. unattended sounds (early selection). The <strong>visual P1 effect</strong> is enhanced over occipital cortex when a stimulus appears at an attended location. Both demonstrate that attention modulates neural processing of sensory input directly. The late P3 component may reflect higher-order processing (meaning, identity) and is debated as a possible marker of consciousness.
+    </div>
+  </div>
+
+  <!-- BRAIN VIEWS -->
+  <div class="hero-view">
+    <div class="view-img-wrap">
+      <img src="renders/ch14_lateral_right.png" alt="Right lateral view showing the right temporoparietal junction">
+    </div>
+    <div class="view-caption">Right lateral view, emphasizing the right temporoparietal junction (TPJ). The right hemisphere plays a special role in attention: damage here causes hemispatial neglect of the left side of space.</div>
+  </div>
+
+  <!-- SUBCORTICAL ATTENTION -->
+  <div class="structure-section">
+    <h2>Subcortical Attention Structures</h2>
+    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px;">Two deep brain structures guide shifts of visual attention. They work beneath conscious control, coordinating with cortical networks to orient us toward important stimuli.</p>
+
+    <div class="structure-card">
+      <div class="structure-card-body">
+        <div class="structure-name">
+          <span class="structure-dot" style="background: var(--colliculus)"></span>
+          Superior Colliculus
+        </div>
+        <div class="structure-aka">Midbrain tectum; paired structures on the dorsal surface of the midbrain</div>
+        <div class="structure-desc">
+          Controls eye movements toward objects of attention, especially in overt attention. Neurons increase firing when attention (not just gaze) is directed to a location. Also mediates <strong>inhibition of return</strong>: patients with unilateral lesions show reduced inhibition of return on the affected side. Temporary inactivation in monkeys eliminates the ability to use selective attention cues until function returns.
+        </div>
+      </div>
+    </div>
+
+    <div class="structure-card">
+      <div class="structure-card-body">
+        <div class="structure-name">
+          <span class="structure-dot" style="background: var(--thalamus)"></span>
+          Pulvinar Nucleus (Thalamus)
+        </div>
+        <div class="structure-aka">Posterior quarter of the thalamus; heavily interconnected with visual pathways and cortex</div>
+        <div class="structure-desc">
+          Critical for orienting and shifting <strong>covert</strong> attention toward visual targets. Filters out distracting stimuli during attention tasks and coordinates activity in larger cortical networks according to attentional demands. In humans, tasks with more distracters produce greater pulvinar activation. Damage to the pulvinar makes it very difficult to orient covert attention.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEEP STRUCTURES VIEWS -->
+  <div class="views-pair">
+    <div>
+      <div class="view-img-wrap">
+        <img src="renders/ch14_deep_ghosted.png" alt="Deep structures with cortex ghosted">
+      </div>
+      <div class="view-caption">Deep structures (ghosted cortex): thalamus, superior colliculus, cingulate gyrus, and insula</div>
+    </div>
+    <div>
+      <div class="view-img-wrap">
+        <img src="renders/ch14_deep_only.png" alt="Deep structures isolated">
+      </div>
+      <div class="view-caption">Deep structures (isolated): subcortical components of the attention and consciousness networks</div>
+    </div>
+  </div>
+
+  <!-- CORTICAL ATTENTION NETWORKS -->
+  <div class="structure-section">
+    <h2>Cortical Attention Networks</h2>
+    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;">Two cortical networks, supported by subcortical structures, work together to control where we direct attention. The dorsal network handles voluntary attention; the ventral network handles reflexive reorienting.</p>
+
+    <h3>Dorsal Frontoparietal Network (Voluntary Attention)</h3>
+
+    <div class="structure-card">
+      <div class="structure-card-body">
+        <div class="structure-name">
+          <span class="structure-dot" style="background: var(--parietal)"></span>
+          Intraparietal Sulcus (IPS)
+        </div>
+        <div class="structure-aka">Region around the IPS in the parietal lobe; human equivalent of monkey area LIP</div>
+        <div class="structure-desc">
+          Neurons here increase firing when attention is directed to particular locations, regardless of whether the target is visual or auditory. Enhanced on fMRI while participants actively steer their attention. Temporary inhibition with TMS makes it difficult to voluntarily shift attention between targets. This is the core parietal node of top-down attentional control.
+        </div>
+      </div>
+    </div>
+
+    <div class="structure-card">
+      <div class="structure-card-body">
+        <div class="structure-name">
+          <span class="structure-dot" style="background: var(--frontal)"></span>
+          Frontal Eye Field (FEF)
+        </div>
+        <div class="structure-aka">In the frontal cortex; closely connected to the superior colliculus</div>
+        <div class="structure-desc">
+          Ensures that gaze is directed according to cognitive goals rather than being captured by eye-catching distracters. Damage to the FEF makes it difficult to prevent gaze from being drawn to peripheral stimuli during voluntary attention tasks. Together with the IPS, the FEF forms the core of the dorsal frontoparietal attention network. Activity in both regions precedes anticipatory activation of the relevant sensory cortex.
+        </div>
+      </div>
+    </div>
+
+    <h3>Right Temporoparietal Network (Reflexive Attention)</h3>
+
+    <div class="structure-card">
+      <div class="structure-card-body">
+        <div class="structure-name">
+          <span class="structure-dot" style="background: var(--temporal)"></span>
+          Temporoparietal Junction (TPJ)
+        </div>
+        <div class="structure-aka">Right hemisphere, at the border of temporal and parietal lobes</div>
+        <div class="structure-desc">
+          Responds to novel or unexpected stimuli regardless of which side of the world they appear on. Receives direct input from visual cortex and has strong connections with ventral frontal cortex (working memory). Acts as a "circuit breaker" that overrides current attentional priorities when something new and important happens. The TPJ system scans the environment for salient stimuli and rapidly reassigns attention.
+        </div>
+      </div>
+    </div>
+
+    <div class="pathway-section">
+      <p style="font-size: 0.88rem; font-weight: 600; text-align: center; margin-bottom: 12px;">Attention Control Flow</p>
+      <div class="pathway-steps">
+        <div class="pathway-step highlighted">
+          FEF + IPS
+          <small>Dorsal: voluntary steering</small>
+        </div>
+        <div class="pathway-arrow">&harr;</div>
+        <div class="pathway-step highlighted">
+          Pulvinar + SC
+          <small>Subcortical: orienting</small>
+        </div>
+        <div class="pathway-arrow">&harr;</div>
+        <div class="pathway-step highlighted">
+          Right TPJ
+          <small>Ventral: circuit breaker</small>
+        </div>
+      </div>
+      <p style="font-size: 0.82rem; color: var(--text-muted); text-align: center; margin-top: 8px;">The dorsal stream steers voluntary attention; the right TPJ interrupts when something novel appears; subcortical structures coordinate eye movements and filtering.</p>
+    </div>
+  </div>
+
+  <!-- CLINICAL DISORDERS -->
+  <div class="structure-section">
+    <h2>Disorders of Attention</h2>
+
+    <div class="case-study">
+      <div class="patient-name">Hemispatial Neglect</div>
+      <div class="patient-detail">Right-hemisphere parietal lesions, often from stroke</div>
+      <p>The person completely disregards the left side of the world, failing to dress the left side of their body, eat food on the left side of the plate, or notice people approaching from the left. <strong>Simultaneous extinction</strong> occurs when both hands are touched at once and the person notices only the right touch. Lesions overlap the frontoparietal attention network. With time, neglect can improve, though extinction often persists. Prism glasses that shift vision rightward during physical therapy may help recalibrate the attention system.</p>
+    </div>
+
+    <div class="case-study">
+      <div class="patient-name">Parminder: B&aacute;lint's Syndrome</div>
+      <div class="patient-detail">Bilateral parietal lobe lesions from two mirror-image strokes</div>
+      <p>Three symptoms: <strong>oculomotor apraxia</strong> (difficulty steering gaze), <strong>optic ataxia</strong> (inability to reach accurately using visual guidance), and <strong>simultagnosia</strong> (an extreme narrowing of the attentional spotlight so that only one object can be perceived at a time). Parminder could identify a comb or a pencil alone, but when both were held up together, she could see only one. Vision itself was largely intact; the deficit was in attention.</p>
+    </div>
+
+    <div class="clinical-note">
+      <div class="label">ADHD</div>
+      At least 5% of children are diagnosed with attention deficit hyperactivity disorder. Associated with slightly reduced brain volumes (3&ndash;4% smaller), especially in the cerebellum and frontal lobes. Abnormalities in the <strong>default mode network</strong> and in dopamine/norepinephrine neurotransmission are implicated. Stimulant treatment (methylphenidate) inhibits dopamine and norepinephrine reuptake and improves focus, but stimulants improve focus in everyone, not just people with ADHD. Allowing children with ADHD to fidget and engage in more physical activity also reduces symptoms.
+    </div>
+  </div>
+
+  <!-- MIDSAGITTAL VIEW -->
+  <div class="hero-view">
+    <div class="view-img-wrap">
+      <img src="renders/ch14_midsagittal.png" alt="Midsagittal view showing cingulate gyrus, thalamus, and superior colliculus">
+    </div>
+    <div class="view-caption">Midsagittal view. Cingulate gyrus (lavender), thalamus (mauve), and superior colliculus (brown) are visible on the medial surface, along with frontal and occipital cortex.</div>
+  </div>
+
+  <!-- CONSCIOUSNESS -->
+  <div class="structure-section">
+    <h2>Consciousness</h2>
+    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px;">Consciousness is the state of being aware that we are aware: perceiving what is going on in our minds and in the world around us. It is closely tied to attention, but it encompasses more, including our sense of time, self-reflection, memory, and the feeling of free will.</p>
+
+    <div class="structure-card">
+      <div class="structure-card-body">
+        <div class="structure-name">
+          <span class="structure-dot" style="background: var(--cingulate)"></span>
+          Default Mode Network
+        </div>
+        <div class="structure-aka">Parts of frontal, temporal, and parietal lobes</div>
+        <div class="structure-desc">
+          A large circuit selectively activated during introspective, reflective thought and relatively deactivated during goal-directed behavior. Functions like a "making-sense" network for integrating daily events with personal memories and world knowledge. Dysfunction within this network is linked to ADHD, autism spectrum disorder, schizophrenia, and dementia. Monkeys and rats have structurally similar circuits, raising the possibility that some nonhuman species engage in self-reflection.
+        </div>
+      </div>
+    </div>
+
+    <div class="structure-card">
+      <div class="structure-card-body">
+        <div class="structure-name">
+          <span class="structure-dot" style="background: var(--frontal)"></span>
+          Frontoparietal Consciousness Network
+        </div>
+        <div class="structure-aka">Medial frontal cortex, cingulate, dorsolateral prefrontal, posterior parietal</div>
+        <div class="structure-desc">
+          Studies of people in comas and vegetative states reveal that consciousness depends on a specific frontoparietal network that overlaps heavily with the attention network. Deeper unconsciousness (from sleep through coma to persistent vegetative state) corresponds to progressively greater deactivation of this network. Some people in persistent vegetative states retain enough neural activity to answer yes/no questions via mental imagery on fMRI.
+        </div>
+      </div>
+    </div>
+
+    <div class="key-concept">
+      <div class="label">Easy vs. hard problems of consciousness</div>
+      The <strong>easy problem</strong>: understanding how particular patterns of neural activity create specific conscious experiences (e.g., reconstructing visual images from brain activity). Difficult in practice, but conceivable in principle. The <strong>hard problem</strong>: understanding why and how brain processes produce subjective experience (<em>qualia</em>). Your experience of "red" might be completely different from someone else's, and we cannot even conceive of technology to test this.
+    </div>
+
+    <div class="exam-note">
+      <div class="label">Free will and the brain</div>
+      Classic Libet (1985) experiments showed that EEG signals for movement preparation appear ~200 ms <em>before</em> participants consciously decide to move. Later fMRI work (Soon et al., 2008) found brain activity predicting decisions up to 5&ndash;10 seconds before conscious awareness of having chosen. These results suggest that the conscious experience of deciding comes after the brain has already begun the decision process, though the brain making the decision is still <em>your</em> brain.
+    </div>
+  </div>
+
+  <!-- PREFRONTAL CORTEX & EXECUTIVE FUNCTION -->
+  <div class="structure-section">
+    <h2>Prefrontal Cortex &amp; Executive Function</h2>
+    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px;">The prefrontal cortex, approximately one-third of the cortical surface, is the seat of <strong>executive function</strong>: the suite of high-level processes that control and organize lower-level cognitive functions in line with our thoughts and goals. Three core processes: task switching, updating (integrating new information via working memory), and inhibition of inappropriate responses.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Region</th>
+            <th>Syndrome</th>
+            <th>Key characteristics</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Dorsolateral PFC</strong></td>
+            <td>Dysexecutive</td>
+            <td>Diminished judgment, planning, insight; reduced cognitive focus; motor-programming deficits; difficulty with task switching (Wisconsin Card Sorting Test failures)</td>
+          </tr>
+          <tr>
+            <td><strong>Orbitofrontal</strong></td>
+            <td>Disinhibited</td>
+            <td>Stimulus-driven behavior; diminished social insight; distractibility; emotional lability (cf. Phineas Gage)</td>
+          </tr>
+          <tr>
+            <td><strong>Mediofrontal</strong></td>
+            <td>Apathetic</td>
+            <td>Diminished spontaneity and verbal output; reduced motor behavior; increased response latency</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="case-study">
+      <div class="patient-name">Phineas Gage (1823&ndash;1860)</div>
+      <div class="patient-detail">Tamping rod through both frontal lobes (especially orbitofrontal cortex) in a blasting accident, 1848</div>
+      <p>Survived for 12 years after the accident but was profoundly changed: rude, aimless, impulsive, with severely impaired attention and social behavior. His friends said he was "no longer Gage." Standard IQ test performance is often only slightly changed after prefrontal injury, but personality, social behavior, planning, and foresight can be devastated. Gage's case illustrates that the frontal lobes govern the most complex and characteristically human aspects of behavior.</p>
+    </div>
+
+    <div class="exam-note">
+      <div class="label">Tests of executive function</div>
+      <strong>Wisconsin Card Sorting Test (WCST):</strong> sort cards by shifting rules; measures task switching. Frontal patients perseverate on old rules. <strong>Stroop Test:</strong> name the ink color of color words (e.g., "BLUE" printed in red); measures response inhibition. <strong>Verbal Fluency (COWAT):</strong> generate words starting with F, A, or S in 60 seconds; measures updating and working memory.
+    </div>
+  </div>
+
+  <!-- DECISION-MAKING -->
+  <div class="structure-section">
+    <h2>Decision-Making and Neuroeconomics</h2>
+    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px;">Two neural systems underlie decision-making. Together they explain why we are not perfectly rational actors: we are loss-averse, subject to sunk cost fallacies, and influenced by emotional valuation as much as logical analysis.</p>
+
+    <div class="pathway-section">
+      <div class="pathway-steps">
+        <div class="pathway-step highlighted">
+          Valuation System
+          <small>Orbitofrontal + ventromedial PFC + reward circuitry</small>
+        </div>
+        <div class="pathway-arrow">&rarr;</div>
+        <div class="pathway-step highlighted">
+          Choice System
+          <small>Dorsolateral PFC + cingulate + parietal (IPS)</small>
+        </div>
+        <div class="pathway-arrow">&rarr;</div>
+        <div class="pathway-step">
+          Action
+          <small>Motor planning and execution</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="key-concept">
+      <div class="label">Loss aversion and prefrontal inhibition</div>
+      Losing $20 feels worse than gaining $20 feels good. The prefrontal cortex normally inhibits impulsive decision-making to avoid loss. As uncertainty increases, prefrontal activation increases. The dorsal anterior cingulate cortex may improve decisions by delaying action until full processing is complete. When people make costly decisions they regret (sunk cost fallacy), activity increases in the amygdala, cingulate, and orbitofrontal cortex.
+    </div>
+  </div>
+
+  <!-- ANTERIOR VIEW -->
+  <div class="hero-view">
+    <div class="view-img-wrap">
+      <img src="renders/ch14_anterior.png" alt="Anterior view showing frontal lobe prominence">
+    </div>
+    <div class="view-caption">Anterior view. The frontal lobes (blue) make up approximately one-third of the cortical surface. Prefrontal cortex is the primary source of executive function and goal-directed behavior.</div>
+  </div>
+
+  <!-- CONSCIOUSNESS TABLE -->
+  <div class="structure-section">
+    <h2>Elements of Consciousness</h2>
+    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px;">Researchers have identified several cognitive capacities that may contribute to consciousness. Some are shared across species:</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Element</th>
+            <th>Definition</th>
+            <th>Other species</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Theory of mind</strong></td>
+            <td>Insight into the mental lives of others; understanding that others act on unique beliefs and desires</td>
+            <td>Only chimpanzees so far</td>
+          </tr>
+          <tr>
+            <td><strong>Mirror recognition</strong></td>
+            <td>Ability to recognize the self as depicted in a mirror</td>
+            <td>Great apes, dolphins, magpies, some elephants</td>
+          </tr>
+          <tr>
+            <td><strong>Metacognition</strong></td>
+            <td>"Thinking about thinking": considering the contents of one's own thoughts</td>
+            <td>Nonhuman primates, dolphins</td>
+          </tr>
+          <tr>
+            <td><strong>Language</strong></td>
+            <td>Arbitrary symbols with grammar to convey concrete or abstract information</td>
+            <td>Generally considered exclusively human</td>
+          </tr>
+          <tr>
+            <td><strong>Empathy</strong></td>
+            <td>Complex emotions and ability to imagine others' feelings</td>
+            <td>Most mammals, from primates and dolphins to rodents</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- KEY TERMS -->
+  <div class="vocab-list">
+    <h2>Key Terms</h2>
+    <dl>
+      <dt>Selective attention</dt>
+      <dd>Focusing on one or more stimuli for enhanced processing; acts as a filter to prevent overload</dd>
+
+      <dt>Overt / Covert attention</dt>
+      <dd>Overt: eyes and attention directed at the same target. Covert: attention shifted without moving the eyes</dd>
+
+      <dt>Inattentional blindness</dt>
+      <dd>Failure to perceive clearly visible stimuli when attention is focused elsewhere (e.g., the gorilla experiment)</dd>
+
+      <dt>Cocktail party effect</dt>
+      <dd>Ability to focus on one voice in a noisy environment; attention enhances processing of attended speech</dd>
+
+      <dt>Inhibition of return</dt>
+      <dd>After reflexive attention moves on, detection at the cued location is briefly impaired, preventing fixation on unimportant stimuli</dd>
+
+      <dt>Event-related potential (ERP)</dt>
+      <dd>Averaged EEG activity time-locked to repeated stimuli; tracks attention effects with millisecond precision</dd>
+
+      <dt>Frontal eye field (FEF)</dt>
+      <dd>Frontal region ensuring gaze follows cognitive goals rather than being captured by salient distracters</dd>
+
+      <dt>Intraparietal sulcus (IPS)</dt>
+      <dd>Parietal region crucial for voluntary steering of the attentional spotlight across modalities</dd>
+
+      <dt>Temporoparietal junction (TPJ)</dt>
+      <dd>Right-hemisphere region that acts as a "circuit breaker," redirecting attention to novel or unexpected stimuli</dd>
+
+      <dt>Hemispatial neglect</dt>
+      <dd>Complete disregard of one side of the world (usually left) after right parietal damage, despite normal vision</dd>
+
+      <dt>B&aacute;lint's syndrome</dt>
+      <dd>Bilateral parietal damage causing oculomotor apraxia, optic ataxia, and simultagnosia (perceiving only one object at a time)</dd>
+
+      <dt>Default mode network</dt>
+      <dd>Circuit activated during introspective thought and deactivated during goal-directed behavior; involves frontal, temporal, and parietal regions</dd>
+
+      <dt>Qualia</dt>
+      <dd>Subjective, personal experiences of perception (e.g., your experience of "red"); central to the hard problem of consciousness</dd>
+
+      <dt>Executive function</dt>
+      <dd>High-level cognitive control: task switching, updating working memory, and inhibiting inappropriate responses; centered in prefrontal cortex</dd>
+
+      <dt>Dorsolateral PFC</dt>
+      <dd>Critical for working memory, task switching, and executive control; damage causes the dysexecutive syndrome</dd>
+
+      <dt>Orbitofrontal cortex</dt>
+      <dd>Important for reward-directed behavior, learning about rewarding choices, and anticipating the value of alternatives</dd>
+
+      <dt>Neuroeconomics</dt>
+      <dd>Study of brain mechanisms during economic decision-making; identifies valuation and choice systems in the brain</dd>
+
+      <dt>Perceptual load</dt>
+      <dd>Processing demands of the current task; determines whether unattended stimuli are filtered early or late</dd>
+    </dl>
+  </div>
+
+  <footer>
+    <div>Watson &amp; Breedlove, <em>Biological Psychology</em>. 3D data from <a href="https://lifesciencedb.jp/bp3d/">BodyParts3D</a> v4.0 (DBCLS), <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div>
+  </footer>
+</div>
+
+</body>
+</html>

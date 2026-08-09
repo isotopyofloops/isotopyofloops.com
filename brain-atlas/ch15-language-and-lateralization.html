@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ch 15: Language and Lateralization | Brain Atlas — isotopy</title>
+<style>
+  :root {
+    --bg: #f6f7f9;
+    --bg-card: #ffffff;
+    --bg-render: #1a1c22;
+    --text: #2a2d32;
+    --text-muted: #6b7280;
+    --border: #e2e5ea;
+    --frontal: #6baecb;
+    --temporal: #5cc77a;
+    --parietal: #c7b563;
+    --occipital: #a86bc7;
+    --thalamus: #b86ba6;
+    --cingulate: #9999cc;
+    --insula: #80b3a6;
+    --cerebellum: #c4856b;
+    --corpus: #b0b0b0;
+    --accent: #6baecb;
+    --accent-light: rgba(107, 174, 203, 0.12);
+    --info: #c7b563;
+    --info-light: rgba(199, 181, 99, 0.12);
+    --warn: #e07850;
+    --warn-light: rgba(224, 120, 80, 0.12);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #16181d;
+      --bg-card: #1e2128;
+      --text: #e1e4e8;
+      --text-muted: #8b949e;
+      --border: #2d333b;
+      --accent-light: rgba(107, 174, 203, 0.15);
+      --info-light: rgba(199, 181, 99, 0.15);
+      --warn-light: rgba(224, 120, 80, 0.15);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #f6f7f9; --bg-card: #ffffff; --text: #2a2d32;
+    --text-muted: #6b7280; --border: #e2e5ea;
+    --accent-light: rgba(107, 174, 203, 0.12);
+    --info-light: rgba(199, 181, 99, 0.12);
+    --warn-light: rgba(224, 120, 80, 0.12);
+  }
+  :root[data-theme="dark"] {
+    --bg: #16181d; --bg-card: #1e2128; --text: #e1e4e8;
+    --text-muted: #8b949e; --border: #2d333b;
+    --accent-light: rgba(107, 174, 203, 0.15);
+    --info-light: rgba(199, 181, 99, 0.15);
+    --warn-light: rgba(224, 120, 80, 0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+  header {
+    padding: 40px 0 8px;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .back-link {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  .chapter-num {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+  }
+  header h1 {
+    width: 100%;
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-top: 4px;
+  }
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 32px;
+    max-width: 640px;
+  }
+
+  .hero-view { margin-bottom: 40px; }
+  .view-img-wrap {
+    background: var(--bg-render);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  .view-img-wrap img {
+    max-width: 100%;
+    height: auto;
+    max-height: 480px;
+  }
+  .view-caption {
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    margin-top: 8px;
+    text-align: center;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+  h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    margin-top: 32px;
+  }
+
+  .structure-section { margin-bottom: 36px; }
+  .structure-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+  .structure-card-body { padding: 20px 24px; }
+  .structure-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .structure-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .structure-aka {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+  .structure-desc {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  .structure-desc strong { font-weight: 600; }
+
+  .key-concept {
+    background: var(--info-light);
+    border-left: 3px solid var(--info);
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+  .key-concept .label {
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--info);
+    margin-bottom: 4px;
+  }
+
+  .clinical-note {
+    background: var(--warn-light);
+    border-left: 3px solid var(--warn);
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+  .clinical-note .label {
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--warn);
+    margin-bottom: 4px;
+  }
+
+  .exam-note {
+    background: var(--accent-light);
+    border-left: 3px solid var(--accent);
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+  .exam-note .label {
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .views-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .views-pair .view-img-wrap img { max-height: 360px; }
+
+  .pathway-section { margin-bottom: 40px; }
+  .pathway-steps {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  .pathway-step {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-align: center;
+    min-width: 120px;
+  }
+  .pathway-step.highlighted {
+    border-color: var(--accent);
+    background: var(--accent-light);
+  }
+  .pathway-step small {
+    display: block;
+    font-weight: 400;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+  .pathway-arrow {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    padding: 0 6px;
+  }
+
+  .network-types {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .network-type-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+  }
+  .network-type-card h4 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .network-type-card p {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+  .network-type-card .brain-region {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-top: 8px;
+  }
+
+  .vocab-list { margin-bottom: 40px; }
+  .vocab-list dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 6px 16px;
+    font-size: 0.88rem;
+  }
+  .vocab-list dt {
+    font-weight: 600;
+    text-align: right;
+    padding-top: 2px;
+  }
+  .vocab-list dd {
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+
+  .case-study {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .case-study .patient-name {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .case-study .patient-detail {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+  .case-study p {
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+    margin: 16px 0;
+  }
+  .table-wrap table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  .table-wrap th, .table-wrap td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .table-wrap th {
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    background: var(--bg-card);
+  }
+  .table-wrap td {
+    line-height: 1.55;
+  }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 0;
+    margin-top: 24px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    line-height: 1.7;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.4rem; }
+    .views-pair { grid-template-columns: 1fr; }
+    .network-types { grid-template-columns: 1fr; }
+    .pathway-steps { flex-direction: column; }
+    .pathway-arrow { transform: rotate(90deg); }
+    .vocab-list dl { grid-template-columns: 1fr; }
+    .vocab-list dt { text-align: left; }
+  }
+  .site-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5em;
+    padding: 12px 24px;
+    border-bottom: 1px solid var(--border);
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+  }
+  .site-nav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .site-nav a:hover { color: var(--text); }
+  .site-nav .site-name {
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="/" class="site-name">isotopy</a>
+  <a href="/lab.html">lab</a>
+  <a href="/brain-atlas/">atlas</a>
+</nav>
+
+<div class="container">
+  <header>
+    <a href="index.html" class="back-link">&larr; Atlas home</a>
+    <a href="views.html" class="back-link">All Views</a>
+    <div class="chapter-num">Chapter 15</div>
+    <h1>Language and Lateralization</h1>
+  </header>
+  <p class="subtitle">How the brain produces and comprehends language, and why the left hemisphere dominates linguistic processing. The classical language circuit connects Broca's area (speech production) and Wernicke's area (comprehension) with supporting structures across frontal, temporal, and parietal cortex. Lateralization extends beyond language to spatial processing, music, and emotion.</p>
+
+  <div class="hero-view">
+    <div class="view-img-wrap">
+      <img src="renders/ch15_lateral_left.png" alt="Left lateral view highlighting the major language areas including Broca's area and Wernicke's area">
+    </div>
+    <div class="view-caption">Left lateral view. Frontal lobe (blue), temporal regions (green), parietal areas (gold), occipital cortex (purple), and cingulate gyrus (lavender). The left hemisphere contains the primary language network: Broca's area (inferior frontal gyrus) and Wernicke's area (posterior superior temporal gyrus).</div>
+  </div>
+
+  <!-- LATERALIZATION -->
+  <div class="structure-section">
+    <h2>Cerebral Lateralization</h2>
+    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;">The two hemispheres are not mirror images. Each has functional specializations, with language heavily lateralized to the left hemisphere in most people. The corpus callosum connects them, enabling interhemispheric communication.</p>
+
+    <div class="network-types">
+      <div class="network-type-card">
+        <h4>Left Hemisphere</h4>
+        <p>Dominant for language (speech production, comprehension, reading, writing), skilled movements, and analytical processing. Contains Broca's area and Wernicke's area. Damage here produces aphasia in ~95% of right-handers and ~70% of left-handers.</p>
+        <span class="brain-region" style="background: var(--accent-light); color: var(--frontal);">Language + Analytical</span>
+      </div>
+      <div class="network-type-card">
+        <h4>Right Hemisphere</h4>
+        <p>Specialized for spatial cognition, face recognition, emotional prosody, music perception, and understanding nonliteral language (metaphor, humor, sarcasm). Right-hemisphere damage causes prosopagnosia, spatial deficits, and flat speech intonation.</p>
+        <span class="brain-region" style="background: rgba(92, 199, 122, 0.15); color: var(--temporal);">Spatial + Emotional</span>
+      </div>
+    </div>
+
+    <div class="structure-card">
+      <div class="structure-card-body">
+        <div class="structure-name">
+          <span class="structure-dot" style="background: var(--corpus);"></span>
+          Corpus Callosum
+        </div>
+        <div class="structure-aka">Major commissure connecting left and right hemispheres</div>
+        <div class="structure-desc">
+          A massive bundle of ~200 million axons connecting homologous regions of the two hemispheres. When severed (as in split-brain surgery for epilepsy), each hemisphere processes information independently. <strong>Split-brain patients</strong> reveal lateralization dramatically: an object felt by the left hand (right hemisphere) can be identified by touch but not named verbally, because the right hemisphere lacks access to left-hemisphere language centers.
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-view">
+      <div class="view-img-wrap">
+        <img src="renders/ch15_superior_section.png" alt="Superior section showing the corpus callosum bridging the two hemispheres from above">
+      </div>
+      <div class="view-caption">Superior section: the brain viewed from above with dorsal cortex clipped to expose the corpus callosum (white, midline) connecting left and right hemispheres. Frontal lobe (blue) anterior, parietal (gold) lateral, occipital (purple) posterior.</div>
+    </div>
+
+    <div class="key-concept">
+      <div class="label">Key Concept</div>
+      <strong>Planum temporale:</strong> an area of the superior temporal lobe that is typically larger on the left side. This asymmetry is present even before birth and correlates with language lateralization. The planum temporale encompasses parts of Wernicke's area and is involved in phonological processing.
+    </div>
+
+    <div class="key-concept">
+      <div class="label">Key Concept</div>
+      <strong>Dichotic presentation:</strong> a technique where different auditory stimuli are delivered simultaneously to each ear. Most people show a right-ear advantage for speech sounds (reflecting left-hemisphere language dominance) and a left-ear advantage for music and emotional tones (reflecting right-hemisphere specialization).
+    </div>
+
+    <div class="exam-note">
+      <div class="label">Exam Note</div>
+      <strong>Wada test</strong> (intracarotid sodium amobarbital test): temporarily anesthetizes one hemisphere by injecting barbiturate into its carotid artery. Used before surgery to confirm which hemisphere houses language. When the language-dominant hemisphere is anesthetized, the patient goes mute; when the other side is anesthetized, speech continues.
+    </div>
+  </div>
+
+  <!-- VIEWS: LATERAL PAIR -->
+  <div class="views-pair">
+    <div>
+      <div class="view-img-wrap">
+        <img src="renders/ch15_lateral_left.png" alt="Left lateral view showing Broca's and Wernicke's areas">
+      </div>
+      <div class="view-caption">Left lateral: the language-dominant hemisphere. IFG (Broca's, blue), STG (Wernicke's, green), angular and supramarginal gyri (gold).</div>
+    </div>
+    <div>
+      <div class="view-img-wrap">
+        <img src="renders/ch15_lateral_right.png" alt="Right lateral view">
+      </div>
+      <div class="view-caption">Right lateral: prosody, spatial processing, face recognition, and emotional content of language.</div>
+    </div>
+  </div>
+
+  <!-- SPLIT-BRAIN CASE STUDY -->
+  <div class="structure-section">
+    <h2>Split-Brain Studies</h2>
+
+    <div class="case-study">
+      <div class="patient-name">Roger Sperry &amp; Michael Gazzaniga's Split-Brain Research</div>
+      <div class="patient-detail">Nobel Prize 1981 | Patients with corpus callosum severed for epilepsy treatment</div>
+      <p>These landmark studies revealed how independently each hemisphere can function. When an image is flashed to only the left visual field (right hemisphere), the patient cannot name it but can pick out the matching object by touch with the left hand. The right hemisphere "knows" but cannot speak. Conversely, images in the right visual field (left hemisphere) are named instantly. This demonstrates that verbal report requires left-hemisphere language areas, while the right hemisphere has its own nonverbal comprehension.</p>
+    </div>
+
+    <div class="key-concept">
+      <div class="label">Key Concept</div>
+      <strong>Handedness and lateralization:</strong> about 90% of people are right-handed, and in most of these individuals, the left hemisphere is language-dominant. Left-handers are more variable; about 70% still have left-hemisphere language dominance, but 15% have right-hemisphere language and 15% have bilateral representation. Handedness appears to be at least partly genetic, though even identical twins can differ in hand preference.
+    </div>
+  </div>
+
+  <!-- APHASIA SECTION -->
+  <div class="structure-section">
+    <h2>Aphasia: Language Disorders from Brain Damage</h2>
+    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;">Aphasia is the partial or complete loss of language abilities due to brain damage, most commonly from stroke. Different lesion locations produce distinct patterns of impairment, revealing the distributed nature of the language network.</p>
+
+    <div class="structure-card">
+      <div class="structure-card-body">
+        <div class="structure-name">
+          <span class="structure-dot" style="background: var(--frontal);"></span>
+          Broca's Area (Inferior Frontal Gyrus)
+        </div>
+        <div class="structure-aka">Left posterior inferior frontal gyrus, Brodmann areas 44 and 45</div>
+        <div class="structure-desc">
+          The anterior speech zone, critical for <strong>speech production</strong> and grammatical processing. Damage produces <strong>nonfluent (Broca's) aphasia</strong>: speech is effortful, telegraphic, and slow, but comprehension is relatively preserved. Patients understand what is said to them and know what they want to say but struggle to produce the words. Because Broca's area neighbors the motor cortex, right-sided weakness or paralysis of the face and arm often accompanies this aphasia.
+        </div>
+      </div>
+    </div>
+
+    <div class="clinical-note">
+      <div class="label">Clinical Note</div>
+      <strong>Nonfluent (Broca's) aphasia example:</strong> when asked to describe their morning, a patient might say "breakfast... eggs... wife... good" with long pauses and effortful articulation. Grammar words (articles, prepositions, verb endings) are typically omitted while content words are preserved, producing agrammatic or "telegraphic" speech.
+    </div>
+
+    <div class="structure-card">
+      <div class="structure-card-body">
+        <div class="structure-name">
+          <span class="structure-dot" style="background: var(--temporal);"></span>
+          Wernicke's Area (Superior Temporal Gyrus)
+        </div>
+        <div class="structure-aka">Left posterior superior temporal gyrus, near the temporoparietal junction</div>
+        <div class="structure-desc">
+          The posterior speech zone, critical for <strong>speech comprehension</strong>. Damage produces <strong>fluent (Wernicke's) aphasia</strong>: speech flows freely but is filled with word substitutions (<em>paraphasias</em>), invented words (<em>neologisms</em>), and nonsensical combinations. Patients produce plenty of speech-like output but cannot comprehend what they hear or read. Because the lesion is posterior, right-sided numbness (not paralysis) is more common.
+        </div>
+      </div>
+    </div>
+
+    <div class="clinical-note">
+      <div class="label">Clinical Note</div>
+      <strong>Fluent (Wernicke's) aphasia example:</strong> asked the same question, a patient might say "Well, I went to the glistering and the curled one was on the table with the flim-flam, you know, the regular thing we always do." The output sounds speech-like in rhythm and grammar but conveys no meaning. Patients are often unaware of their deficit.
+    </div>
+
+    <!-- APHASIA COMPARISON TABLE -->
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>Nonfluent (Broca's)</th>
+            <th>Fluent (Wernicke's)</th>
+            <th>Global</th>
+            <th>Conduction</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Lesion site</strong></td>
+            <td>Left anterior (IFG)</td>
+            <td>Left posterior (STG)</td>
+            <td>Large left hemisphere</td>
+            <td>Arcuate fasciculus / STG</td>
+          </tr>
+          <tr>
+            <td><strong>Speech fluency</strong></td>
+            <td>Impaired, effortful</td>
+            <td>Fluent but empty</td>
+            <td>Severely impaired</td>
+            <td>Fluent</td>
+          </tr>
+          <tr>
+            <td><strong>Comprehension</strong></td>
+            <td>Relatively preserved</td>
+            <td>Severely impaired</td>
+            <td>Severely impaired</td>
+            <td>Relatively preserved</td>
+          </tr>
+          <tr>
+            <td><strong>Repetition</strong></td>
+            <td>Impaired</td>
+            <td>Impaired</td>
+            <td>Severely impaired</td>
+            <td>Severely impaired</td>
+          </tr>
+          <tr>
+            <td><strong>Motor deficit</strong></td>
+            <td>Right-sided weakness</td>
+            <td>Right-sided numbness</td>
+            <td>Often hemiplegia</td>
+            <td>Variable</td>
+          </tr>
+          <tr>
+            <td><strong>Awareness</strong></td>
+            <td>Aware of deficit</td>
+            <td>Often unaware</td>
+            <td>Variable</td>
+            <td>Aware of errors</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="case-study">
+      <div class="patient-name">Tinna (Global Aphasia)</div>
+      <div class="patient-detail">Massive left-hemisphere stroke in her 40s</div>
+      <p>Tinna's stroke destroyed both anterior and posterior language zones, producing global aphasia with complete loss of speech production, comprehension, and even inner monologue. Her personal identity was effectively erased along with her language for several months. After nearly two years of intensive therapy, she regained some language abilities, though they remain quite limited. Her case illustrates that inner speech and outward language share neural substrates, and that global aphasia carries the poorest prognosis for recovery.</p>
+    </div>
+
+    <div class="exam-note">
+      <div class="label">Exam Note</div>
+      <strong>Related terms:</strong> <em>Anomia</em> is difficulty naming objects (common across aphasia types). <em>Agraphia</em> is the inability to write. <em>Alexia</em> is the acquired inability to read (acquired dyslexia). <em>Word deafness</em> is inability to comprehend spoken words specifically. <em>Word blindness</em> is inability to comprehend written words specifically.
+    </div>
+  </div>
+
+  <!-- WERNICKE-GESCHWIND MODEL -->
+  <div class="structure-section">
+    <h2>The Language Circuit</h2>
+    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;">The Wernicke-Geschwind (connectionist) model proposes that language deficits arise from disconnection between specialized brain regions. Though simplified, it provides a useful framework for understanding how information flows through the language network.</p>
+
+    <h3>Classical Pathway: Hearing and Repeating a Word</h3>
+    <div class="pathway-section">
+      <div class="pathway-steps">
+        <div class="pathway-step">
+          Auditory Cortex
+          <small>Sound reception</small>
+        </div>
+        <span class="pathway-arrow">&rarr;</span>
+        <div class="pathway-step highlighted">
+          Wernicke's Area
+          <small>Comprehension</small>
+        </div>
+        <span class="pathway-arrow">&rarr;</span>
+        <div class="pathway-step">
+          Arcuate Fasciculus
+          <small>White matter tract</small>
+        </div>
+        <span class="pathway-arrow">&rarr;</span>
+        <div class="pathway-step highlighted">
+          Broca's Area
+          <small>Speech plan</small>
+        </div>
+        <span class="pathway-arrow">&rarr;</span>
+        <div class="pathway-step">
+          Motor Cortex
+          <small>Mouth, throat, chest</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="key-concept">
+      <div class="label">Key Concept</div>
+      <strong>Arcuate fasciculus:</strong> a white matter fiber bundle traditionally thought to connect Wernicke's area to Broca's area. However, DTI studies have shown it actually terminates in the precentral gyrus (motor cortex) in most people, not quite reaching Broca's area. This finding challenges the classical connectionist model.
+    </div>
+
+    <h3>Classical Pathway: Reading a Word Aloud</h3>
+    <div class="pathway-section">
+      <div class="pathway-steps">
+        <div class="pathway-step">
+          Visual Cortex
+          <small>Letter recognition</small>
+        </div>
+        <span class="pathway-arrow">&rarr;</span>
+        <div class="pathway-step highlighted">
+          Angular Gyrus
+          <small>Visual-to-auditory</small>
+        </div>
+        <span class="pathway-arrow">&rarr;</span>
+        <div class="pathway-step highlighted">
+          Wernicke's Area
+          <small>Word meaning</small>
+        </div>
+        <span class="pathway-arrow">&rarr;</span>
+        <div class="pathway-step highlighted">
+          Broca's Area
+          <small>Speech plan</small>
+        </div>
+        <span class="pathway-arrow">&rarr;</span>
+        <div class="pathway-step">
+          Motor Cortex
+          <small>Speech output</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-note">
+      <div class="label">Exam Note</div>
+      <strong>Modern critiques of the connectionist model:</strong> (1) Language zones are not as rigidly modular as previously believed; fMRI shows distributed processing. (2) The arcuate fasciculus does not actually reach Broca's area in most people. (3) Conduction aphasia may result from cortical lesions in superior temporal cortex, not white matter disconnection. (4) Semantic processing of natural speech relies heavily on <em>both</em> hemispheres, not just the left.
+    </div>
+
+    <div class="key-concept">
+      <div class="label">Key Concept</div>
+      <strong>Motor theory of language:</strong> proposes that the anterior and posterior language zones evolved as specializations for programming complex movements. When we listen to speech, we analyze sounds by reference to the throat and mouth movements that produce them, using the same neural systems we would use to make those sounds ourselves. Evidence: deaf people using American Sign Language employ the same left-hemisphere language regions as hearing speakers, and show comparable aphasia symptoms after left-hemisphere damage.
+    </div>
+  </div>
+
+  <!-- BRAIN STRUCTURES IN THE LANGUAGE NETWORK -->
+  <div class="structure-section">
+    <h2>Key Structures in the Language Network</h2>
+
+    <div class="views-pair">
+      <div>
+        <div class="view-img-wrap">
+          <img src="renders/ch15_midsagittal.png" alt="Midsagittal view showing corpus callosum and medial language-related structures">
+        </div>
+        <div class="view-caption">Midsagittal: corpus callosum (gray), cingulate gyrus (lavender), thalamus (pink), supplementary motor area (blue).</div>
+      </div>
+      <div>
+        <div class="view-img-wrap">
+          <img src="renders/ch15_anterior.png" alt="Anterior view of the brain">
+        </div>
+        <div class="view-caption">Anterior view: bilateral frontal and temporal cortex, with insula (teal) visible deep to the lateral fissure.</div>
+      </div>
+    </div>
+
+    <div class="structure-card">
+      <div class="structure-card-body">
+        <div class="structure-name">
+          <span class="structure-dot" style="background: var(--parietal);"></span>
+          Angular Gyrus
+        </div>
+        <div class="structure-aka">Brodmann area 39, left inferior parietal lobule</div>
+        <div class="structure-desc">
+          Sits at the junction of temporal, parietal, and occipital lobes. In the language circuit, it converts visual information (written words) into an auditory code that Wernicke's area can process. Damage can produce <strong>alexia</strong> (inability to read) and <strong>anomia</strong> (difficulty naming objects). Also involved in numerical processing and spatial cognition.
+        </div>
+      </div>
+    </div>
+
+    <div class="structure-card">
+      <div class="structure-card-body">
+        <div class="structure-name">
+          <span class="structure-dot" style="background: var(--parietal);"></span>
+          Supramarginal Gyrus
+        </div>
+        <div class="structure-aka">Brodmann area 40, left inferior parietal lobule</div>
+        <div class="structure-desc">
+          Part of the inferior parietal lobule, immediately anterior to the angular gyrus. Involved in phonological processing (sound patterns of words) and articulatory planning. Contributes to reading by linking written letters to their speech sounds. Damage is included in the lesion pattern for global aphasia.
+        </div>
+      </div>
+    </div>
+
+    <div class="structure-card">
+      <div class="structure-card-body">
+        <div class="structure-name">
+          <span class="structure-dot" style="background: var(--insula);"></span>
+          Insula
+        </div>
+        <div class="structure-aka">Insular cortex, hidden deep to the lateral fissure</div>
+        <div class="structure-desc">
+          Buried within the lateral sulcus, the insula contributes to speech articulation and motor planning for language production. Some researchers argue that damage to the left insula, rather than Broca's area itself, is responsible for the speech production deficits in nonfluent aphasia. Also involved in emotional processing and interoception.
+        </div>
+      </div>
+    </div>
+
+    <div class="structure-card">
+      <div class="structure-card-body">
+        <div class="structure-name">
+          <span class="structure-dot" style="background: var(--temporal);"></span>
+          Fusiform Gyrus
+        </div>
+        <div class="structure-aka">Occipitotemporal gyrus, ventral temporal lobe</div>
+        <div class="structure-desc">
+          Contains the <strong>fusiform face area (FFA)</strong>, critical for face recognition. Right-hemisphere damage produces <strong>prosopagnosia</strong> (inability to recognize faces). The left fusiform area also houses the <strong>visual word form area (VWFA)</strong>, essential for reading. The fusiform is activated during reading tasks and shows abnormal activation in developmental dyslexia.
+        </div>
+      </div>
+    </div>
+
+    <div class="structure-card">
+      <div class="structure-card-body">
+        <div class="structure-name">
+          <span class="structure-dot" style="background: var(--frontal);"></span>
+          Precentral Gyrus (Motor Cortex)
+        </div>
+        <div class="structure-aka">Primary motor cortex, Brodmann area 4</div>
+        <div class="structure-desc">
+          Controls the muscles of the mouth, tongue, throat, and chest needed for speech production. During word repetition and reading aloud, motor cortex on <em>both</em> sides activates along with supplementary motor cortex and cerebellum. TMS mapping has confirmed that speech production activates not only face areas but also hand areas in motor cortex, supporting the evolutionary link between gestures and language.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEEP STRUCTURES -->
+  <div class="structure-section">
+    <h2>Deep Structures and Subcortical Contributions</h2>
+
+    <div class="views-pair">
+      <div>
+        <div class="view-img-wrap">
+          <img src="renders/ch15_deep_ghosted.png" alt="Deep structures with ghosted cortex overlay">
+        </div>
+        <div class="view-caption">Deep structures (ghosted cortex): thalamus (pink), corpus callosum (gray), cingulate (lavender), insula (teal).</div>
+      </div>
+      <div>
+        <div class="view-img-wrap">
+          <img src="renders/ch15_deep_only.png" alt="Deep structures isolated">
+        </div>
+        <div class="view-caption">Deep structures isolated: subcortical components of the language network.</div>
+      </div>
+    </div>
+
+    <div class="hero-view">
+      <div class="view-img-wrap">
+        <img src="renders/ch15_coronal_section.png" alt="Coronal cross-section showing the thalamus bilaterally in the center of the brain">
+      </div>
+      <div class="view-caption">Coronal cross-section at the level of the thalamus. The anterior cortex has been clipped away to reveal deep structures. Thalamus (pink, bilateral) sits at the core of the brain, flanked by the temporal lobes (green) and topped by frontal (blue) and parietal (gold) cortex. The corpus callosum (white) bridges the hemispheres above.</div>
+    </div>
+
+    <div class="hero-view">
+      <div class="view-img-wrap">
+        <img src="renders/ch15_sagittal_section.png" alt="Sagittal cross-section showing the thalamus, corpus callosum, and cingulate gyrus from the side">
+      </div>
+      <div class="view-caption">Sagittal section near the midline. The right hemisphere cortex is clipped to expose medial structures. Thalamus (pink) sits centrally, with the corpus callosum (white arc) above and the cingulate gyrus (lavender) wrapping over the corpus callosum. Cerebellum (terracotta) and occipital lobe (purple) are visible posteriorly.</div>
+    </div>
+
+    <div class="structure-card">
+      <div class="structure-card-body">
+        <div class="structure-name">
+          <span class="structure-dot" style="background: var(--thalamus);"></span>
+          Thalamus
+        </div>
+        <div class="structure-aka">Bilateral diencephalic relay</div>
+        <div class="structure-desc">
+          Relays auditory input from the medial geniculate nucleus to auditory cortex, providing the sensory stream that the language network decodes. The pulvinar nucleus of the thalamus also participates in attentional gating of language-relevant stimuli. Thalamic lesions can produce "subcortical aphasia" with features overlapping both Broca's and Wernicke's types.
+        </div>
+      </div>
+    </div>
+
+    <div class="structure-card">
+      <div class="structure-card-body">
+        <div class="structure-name">
+          <span class="structure-dot" style="background: var(--cerebellum);"></span>
+          Cerebellum
+        </div>
+        <div class="structure-aka">Bilateral, posterior fossa</div>
+        <div class="structure-desc">
+          Activated during word repetition and reading aloud, alongside bilateral motor cortex and supplementary motor cortex. The cerebellum coordinates the rapid, precisely timed muscle movements required for fluent speech. Cerebellar damage can produce <strong>dysarthria</strong> (difficulty with the mechanics of speech) and scanning speech (abnormally slow, syllable-by-syllable pronunciation).
+        </div>
+      </div>
+    </div>
+
+    <div class="structure-card">
+      <div class="structure-card-body">
+        <div class="structure-name">
+          <span class="structure-dot" style="background: var(--cingulate);"></span>
+          Cingulate Gyrus / Supplementary Motor Area
+        </div>
+        <div class="structure-aka">Medial frontal cortex</div>
+        <div class="structure-desc">
+          The supplementary motor area (SMA), located on the medial surface of the superior frontal gyrus and extending into the cingulate sulcus, is involved in speech initiation and internally generated language. Damage to the left SMA can cause mutism or severely reduced spontaneous speech, even when the patient can repeat words spoken by others. The anterior cingulate contributes to conflict monitoring during language tasks.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BRAIN STIMULATION AND IMAGING -->
+  <div class="structure-section">
+    <h2>Brain Stimulation and Imaging of Language</h2>
+
+    <h3>Electrical Stimulation Mapping</h3>
+    <p style="font-size: 0.9rem; line-height: 1.7; margin-bottom: 16px;">Penfield and Roberts pioneered intraoperative cortical stimulation in conscious patients undergoing neurosurgery. Stimulating the anterior speech zone stopped speech outright. Stimulation elsewhere caused misnaming, impaired repetition, or other interference. Later studies revealed fine-grained compartmentalization of naming, verb generation, reading, and speech production within the classical language areas.</p>
+
+    <div class="key-concept">
+      <div class="label">Key Concept</div>
+      <strong>Bilingual stimulation mapping:</strong> in bilingual patients, electrical stimulation reveals separate subregions that disrupt each language independently. Early bilinguals show completely overlapping organization at the gross neuroanatomical level, but fine-grained mapping exposes language-specific microzones. Early bilingualism also has far-reaching benefits for brain organization and resistance to cognitive decline in later life.
+    </div>
+
+    <h3>Transcranial Magnetic Stimulation (TMS)</h3>
+    <p style="font-size: 0.9rem; line-height: 1.7; margin-bottom: 16px;">TMS creates temporary, noninvasive "virtual lesions" in healthy volunteers. TMS studies have revealed previously unknown <strong>subregions within Broca's area</strong>: the anterior part is involved in semantic meaning of words, while a more posterior part handles the patterning of speech sounds. TMS also confirmed that speech production activates hand motor areas, supporting the evolutionary link between gesture and language.</p>
+
+    <h3>Functional Neuroimaging (PET, fMRI)</h3>
+    <p style="font-size: 0.9rem; line-height: 1.7; margin-bottom: 16px;">Different language tasks produce distinct brain activation patterns:</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th>Primary Activation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Passively <strong>viewing</strong> words</td>
+            <td>Posterior left hemisphere (visual cortex, angular gyrus)</td>
+          </tr>
+          <tr>
+            <td>Passively <strong>hearing</strong> words</td>
+            <td>Bilateral temporal lobes (auditory cortex)</td>
+          </tr>
+          <tr>
+            <td><strong>Repeating</strong> words aloud</td>
+            <td>Bilateral motor cortex, supplementary motor cortex, cerebellum</td>
+          </tr>
+          <tr>
+            <td><strong>Generating</strong> a verb for a noun</td>
+            <td>Left-hemisphere language regions including Broca's area strongly activated</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="key-concept">
+      <div class="label">Key Concept</div>
+      <strong>ERP markers of language processing:</strong> the <em>N400</em> component (a negative potential ~400 ms after stimulus) is elicited by semantically incongruent words ("He stepped on the <em>pancake</em>") and originates from temporoparietal cortex near Wernicke's area. The <em>P600</em> (positive, ~600 ms) is elicited by grammatical violations, indicating that detecting grammar errors requires an additional 200 ms of processing by other components of the language network.
+    </div>
+
+    <div class="key-concept">
+      <div class="label">Key Concept</div>
+      <strong>Silbo Gomero:</strong> a whistled surrogate language used by shepherds in the Canary Islands. Long-term whistlers (silbadores) process Silbo using the same left-hemisphere language mechanisms as spoken language. Non-whistlers process the same sounds using completely different brain regions. This demonstrates that left-hemisphere language systems are plastic enough to accommodate diverse communication modes, if learned early enough.
+    </div>
+  </div>
+
+  <!-- LANGUAGE EVOLUTION AND GENETICS -->
+  <div class="structure-section">
+    <h2>Language Evolution, Genetics, and Development</h2>
+
+    <h3>Language Acquisition and the Sensitive Period</h3>
+    <p style="font-size: 0.9rem; line-height: 1.7; margin-bottom: 16px;">Infants begin babbling nearly all known phonemes but rapidly narrow to those heard in their environment. By 7 months, babies detect grammatical exceptions. The human brain has a <strong>sensitive (critical) period</strong> for language that tapers from maximum sensitivity in early childhood to closure around puberty. After this window, second-language acquisition is more difficult and relies on different brain networks.</p>
+
+    <div class="structure-card">
+      <div class="structure-card-body">
+        <div class="structure-name">
+          <span class="structure-dot" style="background: var(--frontal);"></span>
+          FOXP2 Gene
+        </div>
+        <div class="structure-aka">Forkhead box protein P2, chromosome 7</div>
+        <div class="structure-desc">
+          The first gene specifically linked to language ability. Identified through studying the KE family, in which a mutation in FOXP2 caused severe language impairments across three generations. FOXP2 is a <strong>transcription factor</strong> that regulates expression of other genes. Multiple variants produce different abnormalities in language-associated brain areas. Interestingly, the homologous <em>FoxP2</em> gene is important for vocal learning in songbirds and ultrasonic vocalizations in rodents, suggesting ancient evolutionary roots.
+        </div>
+      </div>
+    </div>
+
+    <div class="clinical-note">
+      <div class="label">Clinical Note</div>
+      <strong>Williams syndrome:</strong> caused by deletion of 28 genes from chromosome 7. Produces intellectual deficits paired with <em>excellent</em> verbal skills and hyperverbal behavior. The converse pattern (extra copies of the same genes) produces very poor expressive language. This double dissociation confirms that language mechanisms have heritable genetic bases.
+    </div>
+
+    <h3>Animal Communication</h3>
+    <p style="font-size: 0.9rem; line-height: 1.7; margin-bottom: 16px;">Many species use vocalizations for communication (alarm calls, mating songs, emotional states), but these lack the defining features of human language, particularly <strong>grammar</strong>: the ability to combine units into novel, meaningful sequences. Songbirds show interesting parallels, including left-hemisphere vocal control and critical periods for song learning. Great apes can learn hundreds of ASL signs and use computerized symbols, but whether this constitutes true language with grammar remains debated.</p>
+
+    <div class="exam-note">
+      <div class="label">Exam Note</div>
+      <strong>Key distinction:</strong> dogs and most animals can learn to associate specific words with actions through practice, but each new combination must be learned from scratch. They appear to lack grammar. What separates human language is the ability to produce and understand sentences never encountered before, by applying grammatical rules to a finite vocabulary.
+    </div>
+  </div>
+
+  <!-- DYSLEXIA -->
+  <div class="structure-section">
+    <h2>Dyslexia: Disorders of Reading</h2>
+    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;">Reading is a recent evolutionary development, so there are no dedicated brain mechanisms for it. Instead, reading co-opts existing language and visual systems, making it vulnerable to developmental and acquired disruptions.</p>
+
+    <h3>Developmental Dyslexia</h3>
+    <p style="font-size: 0.9rem; line-height: 1.7; margin-bottom: 16px;">Affects about 5% of children (especially boys and left-handers). It is a problem specific to written language, not a general cognitive deficit; children with dyslexia can have high IQs. The difficulty lies in connecting reading with ancient speech mechanisms. Brain imaging shows aberrant cortical layering, excessive cortical folding, clusters of neurons in unexpected locations, and atypical activation in the left temporoparietal region and inferior fusiform area during phonological tasks. Widespread changes in white matter pathways suggest problems with axonal connections between language areas.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Can Sound Out Words?</th>
+            <th>Can Read Irregular Words?</th>
+            <th>Error Pattern</th>
+            <th>Core Deficit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Deep dyslexia</strong> (acquired)</td>
+            <td>No (cannot read nonsense words)</td>
+            <td>Some</td>
+            <td>Semantic errors ("cow" read as "horse")</td>
+            <td>Whole-word recognition without letter detail</td>
+          </tr>
+          <tr>
+            <td><strong>Surface dyslexia</strong> (acquired)</td>
+            <td>Yes (reads nonsense words fine)</td>
+            <td>No</td>
+            <td>Regularization errors (reads "yacht" phonetically)</td>
+            <td>Learned letter-to-sound irregularities</td>
+          </tr>
+          <tr>
+            <td><strong>Developmental dyslexia</strong></td>
+            <td>Impaired</td>
+            <td>Variable</td>
+            <td>Phonological and visual errors</td>
+            <td>Disconnection between sound and meaning systems</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="key-concept">
+      <div class="label">Key Concept</div>
+      <strong>Two reading systems:</strong> the brain uses one system focused on the <em>sounds</em> of letters (phonological) and another on the <em>meanings</em> of whole words (lexical). Dyslexia involves a disconnection between these systems. Surface dyslexia does not occur in perfectly phonetic languages (like Italian), confirming that what is lost is a learned, language-specific skill.
+    </div>
+
+    <div class="exam-note">
+      <div class="label">Exam Note</div>
+      <strong>Letter-by-letter reading:</strong> a severe form of acquired dyslexia in which patients must laboriously spell out each word to themselves (silently or aloud) before recognizing it. Normal reading speed is impossible because the only route to word identification is conscious attention to each individual letter.
+    </div>
+  </div>
+
+  <!-- RECOVERY OF FUNCTION -->
+  <div class="structure-section">
+    <h2>Recovery of Function after Brain Damage</h2>
+    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;">The brain has more capacity for plasticity and recovery than previously believed. Recovery depends on age, injury type, severity, and rehabilitation approach.</p>
+
+    <h3>Timeline and Factors</h3>
+    <p style="font-size: 0.9rem; line-height: 1.7; margin-bottom: 16px;">For aphasia following stroke, most recovery occurs in the first 3 months, with continued improvement over 1 to 1.5 years. Recovery is generally better after traumatic brain injury than after stroke (possibly because stroke-damaged cells release harmful signaling chemicals). Older patients and those with more severe initial language loss recover less completely. Left-handers tend to recover better, perhaps due to reduced lateralization.</p>
+
+    <div class="key-concept">
+      <div class="label">Key Concept</div>
+      <strong>Collateral sprouting:</strong> damaged neurons can regrow connections under some circumstances. The adult brain is also capable of limited neurogenesis (producing new neurons), though this currently plays a minimal role in recovery. Stem cell grafts are a promising research area for enhancing repair after stroke and injury.
+    </div>
+
+    <h3>Rehabilitation Approaches</h3>
+
+    <div class="network-types">
+      <div class="network-type-card">
+        <h4>Constraint-Induced Movement Therapy</h4>
+        <p>For stroke-affected limbs: the "good" arm is splinted for up to 90% of waking hours, forcing use of the paralyzed arm. Can restore up to 75% of normal arm use after just 2 weeks, with long-lasting benefits. May work through remapping of motor cortex.</p>
+        <span class="brain-region" style="background: var(--accent-light); color: var(--frontal);">Motor Cortex Reorganization</span>
+      </div>
+      <div class="network-type-card">
+        <h4>Mirror Therapy</h4>
+        <p>A mirror creates the visual illusion that the affected arm is moving normally. The visual feedback somehow overcomes the brain's reluctance to use the weak arm. May be mediated by mirror neurons. Effective for stroke rehabilitation.</p>
+        <span class="brain-region" style="background: rgba(92, 199, 122, 0.15); color: var(--temporal);">Mirror Neuron System</span>
+      </div>
+    </div>
+
+    <div class="network-types">
+      <div class="network-type-card">
+        <h4>Augmentative Communication (AAC)</h4>
+        <p>Alternative language methods ranging from sign language to computerized speech synthesis. Helpful for aphasia, Parkinson's, autism, and ALS. Brain-computer interfaces are being developed to synthesize speech directly from brain activity.</p>
+        <span class="brain-region" style="background: var(--info-light); color: var(--info);">Language Network</span>
+      </div>
+      <div class="network-type-card">
+        <h4>Children's Plasticity</h4>
+        <p>Children show remarkable recovery: even with complete removal of the left hemisphere, the right hemisphere can take over language functions almost entirely. In extremely rare cases of being born without a left hemisphere, individuals have developed normal or even superior language skills.</p>
+        <span class="brain-region" style="background: rgba(168, 107, 199, 0.15); color: var(--occipital);">Neural Plasticity</span>
+      </div>
+    </div>
+
+    <div class="clinical-note">
+      <div class="label">Clinical Note</div>
+      <strong>Chronic traumatic encephalopathy (CTE):</strong> repeated head impacts in contact sports cause accumulation of abnormal tau protein, leading to progressive cognitive impairment. CTE cannot yet be definitively diagnosed in living people (only postmortem). It is alarmingly frequent in American football players, boxers, and soccer players. Like Alzheimer's disease, CTE is a tauopathy, but no effective treatments currently exist.
+    </div>
+
+    <div class="case-study">
+      <div class="patient-name">Gabrielle Giffords</div>
+      <div class="patient-detail">Former U.S. Representative | Survived gunshot wound to left hemisphere</div>
+      <p>After a severe gunshot wound to the left cerebral hemisphere during an assassination attempt, Giffords made striking progress in regaining language and cognitive functions through intensive rehabilitation and compensatory strategies. Her recovery illustrates that even severe left-hemisphere damage can be partially overcome with persistent, focused rehabilitation, though recovery timelines are measured in years.</p>
+    </div>
+  </div>
+
+  <!-- KEY TERMS -->
+  <div class="structure-section">
+    <h2>Key Terms</h2>
+    <div class="vocab-list">
+      <dl>
+        <dt>Lateralization</dt>
+        <dd>Functional specialization of the two cerebral hemispheres, with language typically dominant in the left.</dd>
+
+        <dt>Split-brain</dt>
+        <dd>Condition resulting from severing the corpus callosum; each hemisphere processes information independently.</dd>
+
+        <dt>Planum temporale</dt>
+        <dd>Region of the superior temporal lobe that is larger on the left; associated with language lateralization.</dd>
+
+        <dt>Broca's aphasia</dt>
+        <dd>Nonfluent aphasia from anterior left-hemisphere damage; effortful, telegraphic speech with relatively preserved comprehension.</dd>
+
+        <dt>Wernicke's aphasia</dt>
+        <dd>Fluent aphasia from posterior left-hemisphere damage; abundant but meaningless speech with impaired comprehension.</dd>
+
+        <dt>Global aphasia</dt>
+        <dd>Severe loss of all language abilities from extensive left-hemisphere damage encompassing both speech zones.</dd>
+
+        <dt>Conduction aphasia</dt>
+        <dd>Difficulty repeating heard words despite good comprehension and production; associated with arcuate fasciculus or STG damage.</dd>
+
+        <dt>Arcuate fasciculus</dt>
+        <dd>White matter tract in the classical language circuit; DTI shows it terminates in motor cortex, not Broca's area.</dd>
+
+        <dt>Anomia</dt>
+        <dd>Difficulty naming objects; occurs across many aphasia types.</dd>
+
+        <dt>Paraphasia</dt>
+        <dd>Unintended word or sound substitutions in speech, common in fluent aphasia.</dd>
+
+        <dt>Prosopagnosia</dt>
+        <dd>Inability to recognize faces; associated with right-hemisphere fusiform gyrus damage.</dd>
+
+        <dt>FOXP2</dt>
+        <dd>Transcription factor gene on chromosome 7; first gene linked to language ability. Mutations cause severe language impairment.</dd>
+
+        <dt>Sensitive period</dt>
+        <dd>Limited developmental window (early childhood through puberty) during which language acquisition occurs most readily.</dd>
+
+        <dt>Developmental dyslexia</dt>
+        <dd>Difficulty learning to read despite normal intelligence; reflects disconnection between phonological and lexical reading systems.</dd>
+
+        <dt>Deep dyslexia</dt>
+        <dd>Acquired reading disorder with semantic errors (reading "cow" as "horse"); cannot sound out nonsense words.</dd>
+
+        <dt>Surface dyslexia</dt>
+        <dd>Acquired reading disorder affecting irregular words; can read nonsense words because letter-to-sound rules are intact.</dd>
+
+        <dt>N400 / P600</dt>
+        <dd>ERP components: N400 (400 ms, negative) for semantic violations, P600 (600 ms, positive) for grammatical violations.</dd>
+
+        <dt>Collateral sprouting</dt>
+        <dd>Regrowth of connections by damaged neurons; one mechanism underlying recovery of function after brain injury.</dd>
+
+        <dt>CTE</dt>
+        <dd>Chronic traumatic encephalopathy; progressive tauopathy from repeated head impacts, common in contact sports.</dd>
+
+        <dt>Wada test</dt>
+        <dd>Injection of barbiturate into one carotid artery to temporarily anesthetize a hemisphere; used to determine language lateralization before surgery.</dd>
+      </dl>
+    </div>
+  </div>
+
+  <footer>
+    <div>3D mesh data from <a href="https://lifesciencedb.jp/bp3d/">BodyParts3D</a> v4.0, Database Center for Life Science (DBCLS), Japan</div>
+    <div>Licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div>
+  </footer>
+</div>
+
+</body>
+</html>

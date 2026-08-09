@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ch 13: Memory and Learning | Brain Atlas — isotopy</title>
+<style>
+  :root {
+    --bg: #f6f7f9;
+    --bg-card: #ffffff;
+    --bg-render: #1a1c22;
+    --text: #2a2d32;
+    --text-muted: #6b7280;
+    --border: #e2e5ea;
+    --hippocampus: #e8b830;
+    --amygdala: #e09830;
+    --thalamus: #b86ba6;
+    --mammillary: #eb5454;
+    --cerebellum: #c4856b;
+    --basal-ganglia: #4ab8a8;
+    --fornix: #ccccca;
+    --parahipp: #5cc77a;
+    --accent: #e8b830;
+    --accent-light: rgba(232, 184, 48, 0.12);
+    --info: #6baecb;
+    --info-light: rgba(107, 174, 203, 0.12);
+    --warn: #e07850;
+    --warn-light: rgba(224, 120, 80, 0.12);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #16181d;
+      --bg-card: #1e2128;
+      --text: #e1e4e8;
+      --text-muted: #8b949e;
+      --border: #2d333b;
+      --accent-light: rgba(232, 184, 48, 0.15);
+      --info-light: rgba(107, 174, 203, 0.15);
+      --warn-light: rgba(224, 120, 80, 0.15);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #f6f7f9; --bg-card: #ffffff; --text: #2a2d32;
+    --text-muted: #6b7280; --border: #e2e5ea;
+    --accent-light: rgba(232, 184, 48, 0.12);
+    --info-light: rgba(107, 174, 203, 0.12);
+    --warn-light: rgba(224, 120, 80, 0.12);
+  }
+  :root[data-theme="dark"] {
+    --bg: #16181d; --bg-card: #1e2128; --text: #e1e4e8;
+    --text-muted: #8b949e; --border: #2d333b;
+    --accent-light: rgba(232, 184, 48, 0.15);
+    --info-light: rgba(107, 174, 203, 0.15);
+    --warn-light: rgba(224, 120, 80, 0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+  header {
+    padding: 40px 0 8px;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .back-link {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  .chapter-num {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+  }
+  header h1 {
+    width: 100%;
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-top: 4px;
+  }
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 32px;
+    max-width: 640px;
+  }
+
+  .hero-view { margin-bottom: 40px; }
+  .view-img-wrap {
+    background: var(--bg-render);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  .view-img-wrap img {
+    max-width: 100%;
+    height: auto;
+    max-height: 480px;
+  }
+  .view-caption {
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    margin-top: 8px;
+    text-align: center;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+  h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    margin-top: 32px;
+  }
+
+  .structure-section { margin-bottom: 36px; }
+  .structure-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+  .structure-card-body { padding: 20px 24px; }
+  .structure-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .structure-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .structure-aka {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+  .structure-desc {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  .structure-desc strong { font-weight: 600; }
+
+  .key-concept {
+    background: var(--info-light);
+    border-left: 3px solid var(--info);
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+  .key-concept .label {
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--info);
+    margin-bottom: 4px;
+  }
+
+  .clinical-note {
+    background: var(--warn-light);
+    border-left: 3px solid var(--warn);
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+  .clinical-note .label {
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--warn);
+    margin-bottom: 4px;
+  }
+
+  .exam-note {
+    background: var(--accent-light);
+    border-left: 3px solid var(--accent);
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+  .exam-note .label {
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .views-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .views-pair .view-img-wrap img { max-height: 360px; }
+
+  .pathway-section { margin-bottom: 40px; }
+  .pathway-steps {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  .pathway-step {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-align: center;
+    min-width: 120px;
+  }
+  .pathway-step.highlighted {
+    border-color: var(--accent);
+    background: var(--accent-light);
+  }
+  .pathway-step small {
+    display: block;
+    font-weight: 400;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+  .pathway-arrow {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    padding: 0 6px;
+  }
+
+  .memory-types {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .memory-type-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+  }
+  .memory-type-card h4 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .memory-type-card p {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+  .memory-type-card .brain-region {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-top: 8px;
+  }
+
+  .vocab-list { margin-bottom: 40px; }
+  .vocab-list dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 6px 16px;
+    font-size: 0.88rem;
+  }
+  .vocab-list dt {
+    font-weight: 600;
+    text-align: right;
+    padding-top: 2px;
+  }
+  .vocab-list dd {
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+
+  .case-study {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .case-study .patient-name {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .case-study .patient-detail {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+  .case-study p {
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 0;
+    margin-top: 24px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    line-height: 1.7;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.4rem; }
+    .views-pair { grid-template-columns: 1fr; }
+    .memory-types { grid-template-columns: 1fr; }
+    .pathway-steps { flex-direction: column; }
+    .pathway-arrow { transform: rotate(90deg); }
+    .vocab-list dl { grid-template-columns: 1fr; }
+    .vocab-list dt { text-align: left; }
+  }
+  .site-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5em;
+    padding: 12px 24px;
+    border-bottom: 1px solid var(--border);
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+  }
+  .site-nav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .site-nav a:hover { color: var(--text); }
+  .site-nav .site-name {
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="/" class="site-name">isotopy</a>
+  <a href="/lab.html">lab</a>
+  <a href="/brain-atlas/">atlas</a>
+</nav>
+
+<div class="container">
+  <header>
+    <a href="index.html" class="back-link">&larr; Atlas home</a>
+    <a href="views.html" class="back-link">All Views</a>
+    <div class="chapter-num">Chapter 13</div>
+    <h1>Memory and Learning</h1>
+  </header>
+  <p class="subtitle">Brain structures involved in forming, storing, and retrieving memories. The memory circuit (hippocampus, mammillary bodies, thalamus, and cortex) is highlighted alongside the basal ganglia and cerebellum, which serve nondeclarative memory.</p>
+
+  <div class="hero-view">
+    <div class="view-img-wrap">
+      <img src="renders/ch13_midsagittal.png" alt="Midsagittal view highlighting hippocampus, thalamus, mammillary bodies, fornix, and cerebellum">
+    </div>
+    <div class="view-caption">Midsagittal (midline cut) view. Hippocampus (gold), thalamus (mauve), mammillary bodies (red), fornix (grey-white), and cerebellum (terra cotta) highlighted. Cortical structures ghosted.</div>
+  </div>
+
+  <!-- TWO TYPES OF MEMORY -->
+  <div class="structure-section">
+    <h2>Two Fundamental Types of Memory</h2>
+    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;">Patient H.M.'s surgery revealed that memory is not a single system. He lost the ability to form new <em>declarative</em> memories but could still learn new motor skills. This dissociation defines the two major categories:</p>
+
+    <div class="memory-types">
+      <div class="memory-type-card">
+        <h4>Declarative (Explicit)</h4>
+        <p>Facts and events you can consciously recall and describe to others. Tested by asking "what" questions. Severely impaired in H.M.</p>
+        <p style="margin-top: 8px; font-size: 0.82rem;"><strong>Subtypes:</strong> <em>Episodic</em> (personal events tied to time and place) and <em>Semantic</em> (general knowledge without context of learning)</p>
+        <span class="brain-region" style="background: var(--accent-light); color: var(--hippocampus);">Hippocampus + Medial Temporal Lobe</span>
+      </div>
+      <div class="memory-type-card">
+        <h4>Nondeclarative (Implicit/Procedural)</h4>
+        <p>Skills, habits, conditioned responses, and priming effects shown by performance, not conscious recall. Tested by "how" tasks. Intact in H.M.</p>
+        <p style="margin-top: 8px; font-size: 0.82rem;"><strong>Subtypes:</strong> <em>Skill learning</em>, <em>Priming</em>, <em>Classical conditioning</em>, <em>Operant conditioning</em></p>
+        <span class="brain-region" style="background: rgba(74, 184, 168, 0.15); color: var(--basal-ganglia);">Basal Ganglia + Cerebellum + Cortex</span>
+      </div>
+    </div>
+
+    <div class="exam-note">
+      <div class="label">Key distinction</div>
+      Patient K.C. lost all <em>episodic</em> memory (couldn't recall any personal events) but retained <em>semantic</em> memory (general knowledge, chess skills). His cortical damage, not hippocampal, caused the selective episodic loss. This double dissociation (H.M. vs K.C.) shows episodic and semantic memory rely on partly different brain regions.
+    </div>
+  </div>
+
+  <!-- CASE STUDIES -->
+  <div class="structure-section">
+    <h2>Landmark Cases</h2>
+
+    <div class="case-study">
+      <div class="patient-name">Patient H.M.: Henry Molaison (1926&ndash;2008)</div>
+      <div class="patient-detail">Bilateral medial temporal lobectomy for epilepsy, 1953. Surgeon: William Scoville. Researcher: Brenda Milner.</div>
+      <p>Surgery removed most of the hippocampus, amygdala, and surrounding cortex from both temporal lobes. Result: profound <strong>anterograde amnesia</strong>, unable to form new declarative memories. Short-term memory was normal (could repeat a digit list), but information vanished as soon as he was distracted. Old memories from before surgery were mostly intact (<strong>retrograde amnesia</strong> was limited). Crucially, he could learn new motor skills (mirror tracing) without any memory of having practiced, proving that declarative and nondeclarative memory are separate systems.</p>
+    </div>
+
+    <div class="case-study">
+      <div class="patient-name">Patient N.A.</div>
+      <div class="patient-detail">Accident: miniature sword entered nostril, damaging medial diencephalon, 1960.</div>
+      <p>Damage to the <strong>dorsomedial thalamus</strong> and <strong>mammillary bodies</strong>, not the temporal lobe. Showed the same pattern as H.M.: normal short-term memory, intact nondeclarative memory, but severe anterograde amnesia for declarative information. This proved the hippocampus is part of a larger memory circuit that includes diencephalic structures.</p>
+    </div>
+
+    <div class="case-study">
+      <div class="patient-name">Patient K.C.: Kent Cochrane (1951&ndash;2014)</div>
+      <div class="patient-detail">Motorcycle accident causing extensive cortical damage plus bilateral hippocampal shrinkage.</div>
+      <p>Lost all <strong>episodic memory</strong> (no personal autobiographical recall) but retained <strong>semantic memory</strong> (general knowledge, conversation, chess). Could slowly acquire new semantic knowledge with spaced trials but never new episodic knowledge. The selective episodic loss was attributed to frontal and parietal cortex damage, not hippocampal damage alone.</p>
+    </div>
+  </div>
+
+  <!-- DECLARATIVE MEMORY CIRCUIT -->
+  <div class="structure-section">
+    <h2>The Declarative Memory Circuit</h2>
+    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px;">Three interconnected brain regions are required to <em>form</em> new declarative memories. Damage to any one produces anterograde amnesia. But established memories survive this damage; they are stored elsewhere, most likely in the cerebral cortex.</p>
+
+    <div class="structure-card">
+      <div class="structure-card-body">
+        <div class="structure-name">
+          <span class="structure-dot" style="background: var(--hippocampus)"></span>
+          Hippocampus
+        </div>
+        <div class="structure-aka">Part of the medial temporal lobe; includes entorhinal, perirhinal, and parahippocampal cortices</div>
+        <div class="structure-desc">
+          The hippocampus is essential for <strong>consolidating</strong> short-term declarative memories into long-term storage. It contains <strong>place cells</strong> (neurons that fire when an animal occupies a specific location) and works with <strong>grid cells</strong> in the adjacent entorhinal cortex to form cognitive maps of space. Species that rely heavily on spatial memory (food-caching birds, polygynous voles with large home ranges) have proportionally larger hippocampi.
+        </div>
+        <div class="key-concept">
+          <div class="label">Key finding</div>
+          Removing only the hippocampus impairs declarative memory; removing the hippocampus <em>plus</em> surrounding cortex (entorhinal, parahippocampal, perirhinal) produces even greater impairment. The severity scales with the extent of medial temporal lobe damage.
+        </div>
+      </div>
+    </div>
+
+    <div class="structure-card">
+      <div class="structure-card-body">
+        <div class="structure-name">
+          <span class="structure-dot" style="background: var(--mammillary)"></span>
+          Mammillary Bodies
+        </div>
+        <div class="structure-aka">Paired structures on the ventral surface of the hypothalamus</div>
+        <div class="structure-desc">
+          The mammillary bodies connect the medial temporal lobe to the thalamus, serving as a relay in the declarative memory circuit. They are prominently damaged in <strong>Korsakoff's syndrome</strong>, a degenerative condition caused by thiamine (vitamin B1) deficiency, most commonly seen in chronic alcoholism.
+        </div>
+        <div class="clinical-note">
+          <div class="label">Korsakoff's syndrome</div>
+          Damage to mammillary bodies and dorsomedial thalamus produces amnesia plus two distinctive features not seen in other amnesias: <strong>confabulation</strong> (filling memory gaps with fabricated stories the patient believes are true) and <strong>anosognosia</strong> (denial that anything is wrong). These additional symptoms are attributed to concurrent frontal cortex damage. Cause: thiamine deficiency. Thiamine treatment can halt progression but cannot reverse existing damage.
+        </div>
+      </div>
+    </div>
+
+    <div class="structure-card">
+      <div class="structure-card-body">
+        <div class="structure-name">
+          <span class="structure-dot" style="background: var(--thalamus)"></span>
+          Dorsomedial Thalamus
+        </div>
+        <div class="structure-aka">Medial diencephalon; relay between mammillary bodies and cortex</div>
+        <div class="structure-desc">
+          The dorsomedial thalamus receives input from the mammillary bodies and projects to the cortex. Damage here (as in Patient N.A.) produces the same pattern of anterograde amnesia as hippocampal damage, confirming it is part of the same memory circuit. Together with the mammillary bodies, it forms the <strong>medial diencephalic</strong> component of the declarative memory system.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MEMORY FORMATION PATHWAY -->
+  <div class="pathway-section">
+    <h2>Declarative Memory Formation Pathway</h2>
+    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px;">Information flows through a circuit from sensory input to long-term cortical storage. The hippocampal system is needed to consolidate memories, but not to store them permanently.</p>
+
+    <div class="pathway-steps">
+      <div class="pathway-step">
+        Sensory Input
+        <small>Encoding into STM</small>
+      </div>
+      <span class="pathway-arrow">&rarr;</span>
+      <div class="pathway-step highlighted">
+        Hippocampus
+        <small>Consolidation</small>
+      </div>
+      <span class="pathway-arrow">&rarr;</span>
+      <div class="pathway-step highlighted">
+        Mammillary Bodies
+        <small>Relay</small>
+      </div>
+      <span class="pathway-arrow">&rarr;</span>
+      <div class="pathway-step highlighted">
+        Dorsomedial Thalamus
+        <small>Relay to cortex</small>
+      </div>
+      <span class="pathway-arrow">&rarr;</span>
+      <div class="pathway-step">
+        Cerebral Cortex
+        <small>Long-term storage</small>
+      </div>
+    </div>
+
+    <div class="key-concept">
+      <div class="label">Why H.M. kept old memories</div>
+      Memories already consolidated in the cortex before surgery survived the removal of his hippocampus. The hippocampus is a gateway for <em>forming</em> new declarative memories, not a warehouse for storing them. This is why anterograde amnesia (can't form new memories) is more severe than retrograde amnesia (loss of old memories) in medial temporal lobe damage.
+    </div>
+  </div>
+
+  <!-- BRAIN VIEWS -->
+  <div class="views-pair">
+    <div>
+      <div class="view-img-wrap">
+        <img src="renders/ch13_deep_ghosted.png" alt="Deep structures view showing hippocampus, thalamus, basal ganglia">
+      </div>
+      <div class="view-caption">Deep structures (ghosted cortex): hippocampus, thalamus, basal ganglia, and cerebellum</div>
+    </div>
+    <div>
+      <div class="view-img-wrap">
+        <img src="renders/ch13_deep_only.png" alt="Isolated deep structures">
+      </div>
+      <div class="view-caption">Deep structures (isolated): memory circuit and nondeclarative memory regions</div>
+    </div>
+  </div>
+
+  <!-- NONDECLARATIVE MEMORY -->
+  <div class="structure-section">
+    <h2>Nondeclarative Memory Systems</h2>
+    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;">Different types of nondeclarative memory rely on different brain regions. None require the hippocampus, which is why H.M. could still learn skills.</p>
+
+    <div class="structure-card">
+      <div class="structure-card-body">
+        <div class="structure-name">
+          <span class="structure-dot" style="background: var(--basal-ganglia)"></span>
+          Basal Ganglia
+        </div>
+        <div class="structure-aka">Caudate nucleus, putamen, globus pallidus</div>
+        <div class="structure-desc">
+          The basal ganglia are critical for <strong>skill learning</strong>: acquiring new sensorimotor, perceptual, and cognitive skills through deliberate practice. Damage to the basal ganglia impairs all three types of skill learning. The motor cortex and cerebellum also contribute to sensorimotor skill acquisition.
+        </div>
+        <div class="key-concept">
+          <div class="label">Types of skill learning</div>
+          <strong>Sensorimotor</strong> (mirror tracing, riding a bike), <strong>Perceptual</strong> (reading mirror-reversed text), <strong>Cognitive</strong> (puzzle-solving like the Tower of Hanoi). All impaired by basal ganglia damage; sensorimotor also requires motor cortex and cerebellum.
+        </div>
+      </div>
+    </div>
+
+    <div class="structure-card">
+      <div class="structure-card-body">
+        <div class="structure-name">
+          <span class="structure-dot" style="background: var(--cerebellum)"></span>
+          Cerebellum
+        </div>
+        <div class="structure-aka">Crucial for classical conditioning of reflexes</div>
+        <div class="structure-desc">
+          The cerebellum is essential for <strong>classical conditioning</strong>, particularly the eye-blink reflex. Information about the unconditioned stimulus (air puff, via climbing fibers) and the conditioned stimulus (tone, via auditory pathways) converge on cerebellar neurons. After conditioning, the tone alone triggers an enhanced cerebellar response that produces the blink. Unilateral cerebellar damage eliminates conditioning on that side only.
+        </div>
+      </div>
+    </div>
+
+    <div class="structure-card">
+      <div class="structure-card-body">
+        <div class="structure-name">
+          <span class="structure-dot" style="background: var(--info)"></span>
+          Cortex
+        </div>
+        <div class="structure-aka">Occipitotemporal and left frontal regions</div>
+        <div class="structure-desc">
+          <strong>Priming</strong>, faster or biased processing of a stimulus because of prior exposure, is a cortical function. <strong>Perceptual priming</strong> (based on visual form) involves reduced activity in bilateral occipitotemporal cortex. <strong>Conceptual priming</strong> (based on meaning) involves reduced activation of left frontal cortex. Priming does not require declarative memory: amnesic patients show normal priming for items they cannot consciously recall.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EYE-BLINK CONDITIONING PATHWAY -->
+  <div class="pathway-section">
+    <h2>Eye-Blink Conditioning Circuit</h2>
+    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px;">Classical conditioning of the eye-blink reflex illustrates how the cerebellum mediates associative learning. The CS and US converge in the cerebellum, where synaptic changes encode the learned association.</p>
+
+    <div class="pathway-steps">
+      <div class="pathway-step">
+        Air Puff (US)
+        <small>Cornea &rarr; Cranial nerve V</small>
+      </div>
+      <span class="pathway-arrow">&rarr;</span>
+      <div class="pathway-step">
+        Brainstem
+        <small>Climbing fibers</small>
+      </div>
+      <span class="pathway-arrow">&rarr;</span>
+      <div class="pathway-step highlighted" style="border-color: var(--cerebellum); background: rgba(196, 133, 107, 0.12);">
+        Cerebellum
+        <small>CS + US converge</small>
+      </div>
+      <span class="pathway-arrow">&larr;</span>
+      <div class="pathway-step">
+        Tone (CS)
+        <small>Auditory pathways</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- MEMORY STAGES -->
+  <div class="structure-section">
+    <h2>Stages of Memory</h2>
+
+    <div class="pathway-steps">
+      <div class="pathway-step">
+        Sensory Buffer
+        <small>Seconds</small>
+      </div>
+      <span class="pathway-arrow">&rarr;</span>
+      <div class="pathway-step">
+        Short-Term Memory
+        <small>~30 sec without rehearsal</small>
+      </div>
+      <span class="pathway-arrow">&rarr;</span>
+      <div class="pathway-step highlighted">
+        Long-Term Memory
+        <small>Potentially permanent</small>
+      </div>
+    </div>
+
+    <p style="font-size: 0.9rem; margin: 16px 0; line-height: 1.7;">Three processes move information through these stages: <strong>Encoding</strong> (sensory &rarr; STM), <strong>Consolidation</strong> (STM &rarr; LTM, requires the hippocampus for declarative memories), and <strong>Retrieval</strong> (LTM &rarr; working memory). Failure at any stage means information is lost.</p>
+
+    <div class="exam-note">
+      <div class="label">Reconsolidation</div>
+      Retrieving a memory from LTM makes it temporarily <strong>unstable</strong> before it is reconsolidated. During this window, memories can be distorted. Leading questions ("Did you see <em>the</em> broken headlight?" vs "Was the headlight broken?") can incorporate false details during reconsolidation. This is why repeated self-testing with feedback is one of the most effective study strategies, because each retrieval strengthens the memory through reconsolidation.
+    </div>
+
+    <div class="key-concept">
+      <div class="label">Emotional enhancement</div>
+      Emotionally arousing events are remembered better because the amygdala enhances memory encoding in the cortex via adrenal stress hormones. Propranolol (a beta-blocker) eliminates this enhancement without changing the perceived emotional intensity of the experience.
+    </div>
+  </div>
+
+  <!-- SYNAPTIC PLASTICITY & LTP -->
+  <div class="structure-section">
+    <h2>Synaptic Plasticity &amp; Long-Term Potentiation</h2>
+
+    <p style="font-size: 0.9rem; margin-bottom: 16px; line-height: 1.7;">Memory storage requires physical changes in the brain, specifically changes at synapses. The best-studied mechanism is <strong>long-term potentiation (LTP)</strong>, a long-lasting increase in synaptic strength first discovered in the hippocampus.</p>
+
+    <div class="structure-card">
+      <div class="structure-card-body">
+        <div class="structure-name">
+          <span class="structure-dot" style="background: var(--hippocampus)"></span>
+          LTP in the Hippocampus
+        </div>
+        <div class="structure-aka">Hebbian synapses: "cells that fire together wire together"</div>
+        <div class="structure-desc">
+          A brief high-frequency burst of stimulation (tetanus) to presynaptic neurons produces a long-lasting enhancement of the postsynaptic response. This depends on two glutamate receptor types working together:
+        </div>
+
+        <div style="margin-top: 16px;">
+          <p style="font-size: 0.9rem; line-height: 1.7; margin-bottom: 8px;">
+            <strong>AMPA receptors</strong>: mediate normal synaptic transmission. During low-level activity, these are the only active glutamate receptors.
+          </p>
+          <p style="font-size: 0.9rem; line-height: 1.7; margin-bottom: 8px;">
+            <strong>NMDA receptors</strong>: blocked by Mg<sup>2+</sup> during normal activity. Only become active when strong AMPA-mediated depolarization ejects the Mg<sup>2+</sup> plug <em>and</em> glutamate is present. This dual requirement (depolarization + ligand) makes them <strong>coincidence detectors</strong>.
+          </p>
+          <p style="font-size: 0.9rem; line-height: 1.7;">
+            When NMDA receptors open, Ca<sup>2+</sup> floods in, triggering enzymes that: (1) move additional AMPA receptors to the synapse, (2) increase existing AMPA receptor conductance, (3) stimulate production of new AMPA receptors, and (4) cause retrograde signaling that increases presynaptic glutamate release. The synapse is strengthened on both sides.
+          </p>
+        </div>
+
+        <div class="exam-note">
+          <div class="label">Evidence linking LTP to memory</div>
+          <strong>Correlational:</strong> LTP time course matches memory formation. <strong>Blocking:</strong> NMDA antagonists impair LTP and spatial memory (Morris water maze). Knockout mice lacking hippocampal NMDA receptors can't form LTP or declarative memories. <strong>Enhancement:</strong> Mice overexpressing NMDA receptors show enhanced LTP and better long-term memory. <strong>Behavioral:</strong> Memory training induces measurable LTP in the hippocampus.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ENVIRONMENTAL ENRICHMENT -->
+  <div class="structure-section">
+    <h2>Environmental Enrichment &amp; Brain Plasticity</h2>
+    <p style="font-size: 0.9rem; line-height: 1.7; margin-bottom: 16px;">Living in a complex environment with opportunities for learning produces measurable brain changes. Compared to animals in impoverished conditions, enriched-condition animals show:</p>
+
+    <div style="font-size: 0.9rem; line-height: 1.8; padding-left: 20px; margin-bottom: 16px;">
+      &bull; Heavier, thicker cortex (especially somatosensory and visual areas)<br>
+      &bull; Enhanced cholinergic activity throughout the cortex<br>
+      &bull; More dendritic branches and more dendritic spines on cortical neurons<br>
+      &bull; Larger cortical synapses<br>
+      &bull; More hippocampal neurons (newly generated neurons survive longer)<br>
+      &bull; Enhanced recovery from brain damage
+    </div>
+
+    <div class="key-concept">
+      <div class="label">Aplysia &amp; simple learning</div>
+      Even in the sea slug <em>Aplysia</em>, learning changes synapses. <strong>Short-term habituation</strong>: decreased neurotransmitter release at the sensory-motor synapse. <strong>Long-term habituation</strong>: actual reduction in the <em>number</em> of synapses. These findings from an animal with a simple nervous system reveal fundamental cellular principles that generalize across species.
+    </div>
+  </div>
+
+  <!-- ADDITIONAL VIEWS -->
+  <div class="views-pair">
+    <div>
+      <div class="view-img-wrap">
+        <img src="renders/ch13_anterior.png" alt="Anterior view showing thalamus and basal ganglia">
+      </div>
+      <div class="view-caption">Anterior (front): thalamus and basal ganglia visible through ghosted cortex</div>
+    </div>
+    <div>
+      <div class="view-img-wrap">
+        <img src="renders/ch13_ventral.png" alt="Ventral view showing hippocampus, mammillary bodies, and cerebellum">
+      </div>
+      <div class="view-caption">Ventral (bottom): hippocampus, mammillary bodies, and cerebellum from below</div>
+    </div>
+  </div>
+
+  <!-- KEY TERMS -->
+  <div class="vocab-list">
+    <h2>Key Terms</h2>
+    <dl>
+      <dt>Anterograde amnesia</dt>
+      <dd>Inability to form new memories after brain damage or trauma</dd>
+
+      <dt>Retrograde amnesia</dt>
+      <dd>Loss of memories formed before brain damage (usually limited to hours or days)</dd>
+
+      <dt>Declarative memory</dt>
+      <dd>Explicit memory for facts (semantic) and events (episodic); requires hippocampus to form</dd>
+
+      <dt>Nondeclarative memory</dt>
+      <dd>Implicit memory shown by performance: skills, priming, conditioning; does not require hippocampus</dd>
+
+      <dt>Episodic memory</dt>
+      <dd>Autobiographical memories tied to a specific time and place</dd>
+
+      <dt>Semantic memory</dt>
+      <dd>General knowledge without memory of when or where it was learned</dd>
+
+      <dt>Consolidation</dt>
+      <dd>Process of converting short-term memory into long-term memory; requires hippocampus for declarative memories</dd>
+
+      <dt>Reconsolidation</dt>
+      <dd>Process by which retrieved memories become temporarily unstable before being restabilized; vulnerable to distortion</dd>
+
+      <dt>Place cells</dt>
+      <dd>Hippocampal neurons that fire when an animal is in or moving toward a specific location</dd>
+
+      <dt>Grid cells</dt>
+      <dd>Entorhinal cortex neurons that encode spatial position like a latitude/longitude grid</dd>
+
+      <dt>Long-term potentiation (LTP)</dt>
+      <dd>Long-lasting enhancement of synaptic transmission after high-frequency stimulation; candidate mechanism for memory</dd>
+
+      <dt>NMDA receptor</dt>
+      <dd>Glutamate receptor that acts as a coincidence detector; requires both depolarization and glutamate to open; critical for LTP</dd>
+
+      <dt>AMPA receptor</dt>
+      <dd>Glutamate receptor that mediates normal fast synaptic transmission; upregulated during LTP</dd>
+
+      <dt>Confabulation</dt>
+      <dd>Filling memory gaps with fabricated information that the patient believes is true; seen in Korsakoff's syndrome</dd>
+
+      <dt>Korsakoff's syndrome</dt>
+      <dd>Amnesia caused by thiamine deficiency (usually from alcoholism); damages mammillary bodies and dorsomedial thalamus</dd>
+
+      <dt>Cognitive map</dt>
+      <dd>Mental representation of the spatial layout of an environment; depends on the hippocampus</dd>
+
+      <dt>Engram</dt>
+      <dd>The physical memory trace: the neural change that encodes a specific memory</dd>
+
+      <dt>Priming</dt>
+      <dd>Changed processing of a stimulus due to prior exposure; does not require conscious recall</dd>
+    </dl>
+  </div>
+
+  <footer>
+    <div>Watson &amp; Breedlove, <em>Biological Psychology</em>. 3D data from <a href="https://lifesciencedb.jp/bp3d/">BodyParts3D</a> v4.0 (DBCLS), <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div>
+  </footer>
+</div>
+
+</body>
+</html>
