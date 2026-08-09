@@ -36,41 +36,41 @@
         }
         :root[data-theme="light"],
         :root.light {
-            --bg: #f4f4f0;
-            --bg-viewer: #e8e8e4;
+            --bg: #ffffff;
+            --bg-viewer: #f5f5f5;
             --bg-surface: #ffffff;
-            --border: #c0c0b8;
-            --border-subtle: #d0d0c8;
-            --text: #222;
-            --text-bright: #111;
-            --text-dim: #555;
-            --text-mid: #444;
-            --label: #3a4a5a;
-            --accent: #2a5a8c;
-            --accent-hover: #1e4570;
-            --slider-track: #c0c0b8;
-            --btn-bg: #e4e4e0;
-            --btn-active-bg: #d0d4e0;
-            --thumb-border: #f4f4f0;
+            --border: #d9d9d9;
+            --border-subtle: #e5e5e5;
+            --text: #111111;
+            --text-bright: #000000;
+            --text-dim: #666666;
+            --text-mid: #333333;
+            --label: #1a4fa3;
+            --accent: #1a4fa3;
+            --accent-hover: #143d82;
+            --slider-track: #d9d9d9;
+            --btn-bg: #f0f0f0;
+            --btn-active-bg: #e0e4f0;
+            --thumb-border: #ffffff;
         }
         @media (prefers-color-scheme: light) {
             :root:not([data-theme="dark"]) {
-                --bg: #f4f4f0;
-                --bg-viewer: #e8e8e4;
+                --bg: #ffffff;
+                --bg-viewer: #f5f5f5;
                 --bg-surface: #ffffff;
-                --border: #c0c0b8;
-                --border-subtle: #d0d0c8;
-                --text: #222;
-                --text-bright: #111;
-                --text-dim: #555;
-                --text-mid: #444;
-                --label: #3a4a5a;
-                --accent: #2a5a8c;
-                --accent-hover: #1e4570;
-                --slider-track: #c0c0b8;
-                --btn-bg: #e4e4e0;
-                --btn-active-bg: #d0d4e0;
-                --thumb-border: #f4f4f0;
+                --border: #d9d9d9;
+                --border-subtle: #e5e5e5;
+                --text: #111111;
+                --text-bright: #000000;
+                --text-dim: #666666;
+                --text-mid: #333333;
+                --label: #1a4fa3;
+                --accent: #1a4fa3;
+                --accent-hover: #143d82;
+                --slider-track: #d9d9d9;
+                --btn-bg: #f0f0f0;
+                --btn-active-bg: #e0e4f0;
+                --thumb-border: #ffffff;
             }
         }
 
@@ -121,7 +121,7 @@
         }
         .geometry-label .electron-geom {
             font-family: 'Courier New', monospace;
-            font-size: 0.72em;
+            font-size: 0.82em;
             color: var(--text-dim);
             letter-spacing: 0.05em;
             text-transform: uppercase;
@@ -151,7 +151,7 @@
         .control-group label {
             display: block;
             font-family: 'Courier New', monospace;
-            font-size: 0.75em;
+            font-size: 0.85em;
             color: var(--label);
             letter-spacing: 0.06em;
             text-transform: uppercase;
@@ -205,7 +205,7 @@
         .info-block:last-child { border-bottom: none; }
         .info-label {
             font-family: 'Courier New', monospace;
-            font-size: 0.72em;
+            font-size: 0.82em;
             color: var(--text-dim);
             letter-spacing: 0.06em;
             text-transform: uppercase;
@@ -225,7 +225,7 @@
         }
 
         .example-molecule {
-            font-size: 0.88em;
+            font-size: 0.95em;
             color: var(--text-mid);
             margin-top: 0.3em;
             font-style: italic;
@@ -242,7 +242,7 @@
             align-items: center;
             gap: 0.4em;
             font-family: 'Courier New', monospace;
-            font-size: 0.72em;
+            font-size: 0.82em;
             color: var(--text-mid);
             letter-spacing: 0.03em;
         }
@@ -259,7 +259,7 @@
         }
         .preset-btn {
             font-family: 'Courier New', monospace;
-            font-size: 0.72em;
+            font-size: 0.85em;
             color: var(--label);
             background: var(--btn-bg);
             border: 1px solid var(--border);
@@ -287,7 +287,7 @@
         }
         .toggle-btn {
             font-family: 'Courier New', monospace;
-            font-size: 0.75em;
+            font-size: 0.85em;
             color: var(--label);
             background: var(--btn-bg);
             border: 1px solid var(--border);
@@ -317,7 +317,7 @@
             width: 100%;
             border-collapse: collapse;
             font-family: 'Courier New', monospace;
-            font-size: 0.68em;
+            font-size: 0.8em;
             letter-spacing: 0.02em;
         }
         .axe-table th {
@@ -359,7 +359,7 @@
             top: 1em;
             right: 1em;
             font-family: 'Courier New', monospace;
-            font-size: 0.7em;
+            font-size: 0.78em;
             color: var(--label);
             background: var(--btn-bg);
             border: 1px solid var(--border);
@@ -420,6 +420,23 @@
     <div class="resize-handle" id="resize-handle"></div>
 
     <div class="controls-panel">
+        <div class="info-block">
+            <div class="info-label">Molecules</div>
+            <div class="presets" id="presets"></div>
+        </div>
+
+        <div class="info-block">
+            <div class="info-label">VSEPR Taxonomy</div>
+            <div class="axe-table-wrap">
+                <table class="axe-table" id="axe-table">
+                    <thead>
+                        <tr><th>AXE</th><th>LP</th><th>Shape</th><th>Angles</th><th>Example</th></tr>
+                    </thead>
+                    <tbody id="axe-tbody"></tbody>
+                </table>
+            </div>
+        </div>
+
         <div class="control-group">
             <label>Bonding pairs</label>
             <div class="slider-row">
@@ -433,6 +450,21 @@
             <div class="slider-row">
                 <input type="range" id="lone-slider" min="0" max="3" value="0" step="1">
                 <span class="slider-value" id="lone-value">0</span>
+            </div>
+        </div>
+
+        <div class="info-block">
+            <div class="toggle-row">
+                <button class="toggle-btn" id="angle-toggle">Show angles</button>
+            </div>
+        </div>
+
+        <div class="info-block">
+            <div class="info-label">Legend</div>
+            <div class="legend">
+                <div class="legend-item"><div class="legend-dot" style="background:#5588cc;"></div> Central</div>
+                <div class="legend-item"><div class="legend-dot" style="background:#c0c0d4;"></div> Bonding</div>
+                <div class="legend-item"><div class="legend-dot" style="background:#7a5a9f; opacity:0.7;"></div> Lone pair</div>
             </div>
         </div>
 
@@ -456,41 +488,9 @@
             <div class="info-value" id="example-mol">CH₄ (methane)</div>
         </div>
 
-        <div class="info-block">
-            <div class="info-label">Legend</div>
-            <div class="legend">
-                <div class="legend-item"><div class="legend-dot" style="background:#5588cc;"></div> Central</div>
-                <div class="legend-item"><div class="legend-dot" style="background:#c0c0d4;"></div> Bonding</div>
-                <div class="legend-item"><div class="legend-dot" style="background:#7a5a9f; opacity:0.7;"></div> Lone pair</div>
-            </div>
-        </div>
-
-        <div class="info-block">
-            <div class="toggle-row">
-                <button class="toggle-btn" id="angle-toggle">Show angles</button>
-            </div>
-        </div>
-
-        <div class="info-block">
-            <div class="info-label">Molecules</div>
-            <div class="presets" id="presets"></div>
-        </div>
-
-        <div class="info-block">
-            <div class="info-label">VSEPR Taxonomy</div>
-            <div class="axe-table-wrap">
-                <table class="axe-table" id="axe-table">
-                    <thead>
-                        <tr><th>AXE</th><th>LP</th><th>Shape</th><th>Angles</th><th>Example</th></tr>
-                    </thead>
-                    <tbody id="axe-tbody"></tbody>
-                </table>
-            </div>
-        </div>
-
         <div class="info-block" style="border-bottom:none;">
             <div class="info-label">About</div>
-            <p style="font-size:0.85em; color:var(--text-dim); line-height:1.6; margin:0.3em 0 0;">
+            <p style="font-size:0.95em; color:var(--text-dim); line-height:1.6; margin:0.3em 0 0;">
                 Valence Shell Electron Pair Repulsion theory predicts molecular geometry
                 from the number of electron domains around a central atom. Electron domains
                 (bonding + lone pairs) repel each other and arrange to maximize separation.
@@ -969,7 +969,7 @@ function applyTheme(dark) {
     } else {
         document.documentElement.setAttribute('data-theme', 'light');
         document.documentElement.classList.add('light');
-        renderer.setClearColor(0xe8e8e4);
+        renderer.setClearColor(0xf5f5f5);
         themeBtn.textContent = 'dark';
     }
 }
