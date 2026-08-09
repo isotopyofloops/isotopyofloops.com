@@ -8,6 +8,77 @@
     <link rel="alternate" type="text/plain" href="/llms.txt" title="Machine-readable site description">
     <link rel="stylesheet" href="style.css">
     <style>
+        :root {
+            --lab-bg: #08080f;
+            --lab-text: #c8c8c8;
+            --lab-text-bright: #e0e0e8;
+            --lab-text-dim: #777;
+            --lab-text-muted: #555;
+            --lab-heading: #e0e0e8;
+            --lab-subtitle: #666;
+            --lab-link: #7a9fd4;
+            --lab-card-border: #1e1e2e;
+            --lab-card-bg: transparent;
+            --lab-card-title: #c0c0d4;
+            --lab-card-subject: #7a8aaa;
+            --lab-nav-name: #7a8aaa;
+            --lab-nav-link: #555;
+            --lab-nav-hover: #c8c8c8;
+            --lab-nav-active: #9090b0;
+            --lab-nav-border: #1e1e2e;
+            --lab-footer-border: #1a1a2a;
+            --lab-footer-text: #383848;
+        }
+        @media (prefers-color-scheme: light) {
+            :root {
+                --lab-bg: #ffffff;
+                --lab-text: #111111;
+                --lab-text-bright: #000000;
+                --lab-text-dim: #444444;
+                --lab-text-muted: #666666;
+                --lab-heading: #111111;
+                --lab-subtitle: #666666;
+                --lab-link: #1a4fa3;
+                --lab-card-border: #d9d9d9;
+                --lab-card-bg: #fafafa;
+                --lab-card-title: #111111;
+                --lab-card-subject: #1a4fa3;
+                --lab-nav-name: #1a4fa3;
+                --lab-nav-link: #666666;
+                --lab-nav-hover: #111111;
+                --lab-nav-active: #1a4fa3;
+                --lab-nav-border: #d9d9d9;
+                --lab-footer-border: #d9d9d9;
+                --lab-footer-text: #999999;
+            }
+        }
+
+        body {
+            background: var(--lab-bg);
+            color: var(--lab-text);
+        }
+        nav {
+            border-bottom-color: var(--lab-nav-border);
+        }
+        nav .site-name {
+            color: var(--lab-nav-name);
+        }
+        nav .site-name:hover { color: var(--lab-nav-hover); }
+        nav a {
+            color: var(--lab-nav-link);
+        }
+        nav a:hover { color: var(--lab-nav-hover); }
+        nav a.active { color: var(--lab-nav-active); }
+        h1 {
+            color: var(--lab-heading);
+        }
+        a { color: var(--lab-link); }
+        footer {
+            border-top-color: var(--lab-footer-border);
+            color: var(--lab-footer-text);
+        }
+        footer a { color: var(--lab-link); }
+
         .lab-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -15,7 +86,8 @@
             margin-top: 2em;
         }
         .lab-card {
-            border: 1px solid #1e1e2e;
+            border: 1px solid var(--lab-card-border);
+            background: var(--lab-card-bg);
             border-radius: 4px;
             padding: 1.6em;
             transition: border-color 0.2s;
@@ -24,34 +96,34 @@
             color: inherit;
         }
         .lab-card:hover {
-            border-color: #7a9fd4;
+            border-color: var(--lab-link);
             text-decoration: none;
         }
         .lab-card-title {
             font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
             font-weight: 400;
             font-size: 1.1em;
-            color: #c0c0d4;
+            color: var(--lab-card-title);
             margin-bottom: 0.3em;
         }
         .lab-card-subject {
             font-family: 'Courier New', monospace;
             font-size: 0.78em;
-            color: #7a8aaa;
+            color: var(--lab-card-subject);
             letter-spacing: 0.04em;
             text-transform: uppercase;
             margin-bottom: 0.8em;
         }
         .lab-card-desc {
             font-size: 0.9em;
-            color: #777;
+            color: var(--lab-text-dim);
             line-height: 1.6;
         }
         .lab-card-features {
             margin-top: 0.8em;
             font-family: 'Courier New', monospace;
             font-size: 0.78em;
-            color: #555;
+            color: var(--lab-text-muted);
             letter-spacing: 0.02em;
         }
         .lab-card-features span {
@@ -69,7 +141,7 @@
 </nav>
 
 <h1>Lab</h1>
-<p style="color:#666; font-style:italic; font-size:0.92em; margin-bottom:0.5em;">
+<p style="color:var(--lab-subtitle); font-style:italic; font-size:0.92em; margin-bottom:0.5em;">
     Interactive explorations in science and mathematics.
     Built for learning, teaching, and projecting onto classroom screens.
 </p>

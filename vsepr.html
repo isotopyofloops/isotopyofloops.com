@@ -741,11 +741,8 @@ function buildMolecule(nBonding, nLone) {
 
         if (isLone) {
             const lobe = new THREE.Mesh(loneGeom, loneMat);
-            lobe.position.copy(dir.clone().multiplyScalar(bondLen * 0.85));
-            lobe.scale.set(1.0, 1.0, 1.0);
-            const axis = dir.clone().normalize();
-            lobe.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), axis);
-            lobe.scale.set(1.2, 2.2, 1.2);
+            lobe.position.copy(dir.clone().multiplyScalar(bondLen * 0.75));
+            lobe.scale.set(1.8, 1.8, 1.8);
             molGroup.add(lobe);
         } else {
             // Bonding atom
