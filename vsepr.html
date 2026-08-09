@@ -452,6 +452,11 @@
         </div>
 
         <div class="info-block">
+            <div class="info-label">Molecules</div>
+            <div class="presets" id="presets"></div>
+        </div>
+
+        <div class="info-block">
             <div class="info-label">VSEPR Taxonomy</div>
             <div class="axe-table-wrap">
                 <table class="axe-table" id="axe-table">
@@ -758,11 +763,16 @@ function updateInfo(nBonding, nLone) {
     document.getElementById('example-mol').textContent = data.example;
 }
 
-function updateTableHighlight(nBonding, nLone) {
+function updateHighlights(nBonding, nLone) {
     document.querySelectorAll('#axe-tbody tr').forEach(row => {
         const b = parseInt(row.dataset.b);
         const l = parseInt(row.dataset.l);
         row.classList.toggle('active-row', b === nBonding && l === nLone);
+    });
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+        const b = parseInt(btn.dataset.b);
+        const l = parseInt(btn.dataset.l);
+        btn.classList.toggle('active', b === nBonding && l === nLone);
     });
 }
 
@@ -779,7 +789,7 @@ function update() {
     buildMolecule(nBonding, nLone);
     buildAngleArcs(nBonding, nLone);
     updateInfo(nBonding, nLone);
-    updateTableHighlight(nBonding, nLone);
+    updateHighlights(nBonding, nLone);
 }
 
 // Sliders
@@ -805,6 +815,41 @@ loneSlider.addEventListener('input', () => {
     currentLone = parseInt(loneSlider.value);
     loneValue.textContent = currentLone;
     update();
+});
+
+// Molecule presets
+const PRESETS = [
+    { label: 'CO₂', b: 2, l: 0 },
+    { label: 'BF₃', b: 3, l: 0 },
+    { label: 'SO₂', b: 2, l: 1 },
+    { label: 'CH₄', b: 4, l: 0 },
+    { label: 'NH₃', b: 3, l: 1 },
+    { label: 'H₂O', b: 2, l: 2 },
+    { label: 'PCl₅', b: 5, l: 0 },
+    { label: 'SF₄', b: 4, l: 1 },
+    { label: 'ClF₃', b: 3, l: 2 },
+    { label: 'SF₆', b: 6, l: 0 },
+    { label: 'BrF₅', b: 5, l: 1 },
+    { label: 'XeF₄', b: 4, l: 2 },
+];
+const presetsEl = document.getElementById('presets');
+PRESETS.forEach(p => {
+    const btn = document.createElement('button');
+    btn.className = 'preset-btn';
+    btn.textContent = p.label;
+    btn.dataset.b = p.b;
+    btn.dataset.l = p.l;
+    btn.addEventListener('click', () => {
+        currentBonding = p.b;
+        currentLone = p.l;
+        bondingSlider.value = currentBonding;
+        loneSlider.value = currentLone;
+        loneSlider.max = Math.min(3, 6 - currentBonding);
+        bondingValue.textContent = currentBonding;
+        loneValue.textContent = currentLone;
+        update();
+    });
+    presetsEl.appendChild(btn);
 });
 
 // AXE taxonomy table
