@@ -738,18 +738,13 @@ function buildMolecule(nBonding, nLone) {
         molGroup.add(stick);
 
         if (isLone) {
-            // Lone pair lobe (elongated ellipsoid)
             const lobe = new THREE.Mesh(loneGeom, loneMat);
-            lobe.position.copy(pos);
-            lobe.scale.set(1.3, 1.3, 1.3);
+            lobe.position.copy(dir.clone().multiplyScalar(bondLen * 0.85));
+            lobe.scale.set(1.0, 1.0, 1.0);
+            const axis = dir.clone().normalize();
+            lobe.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), axis);
+            lobe.scale.set(1.2, 2.2, 1.2);
             molGroup.add(lobe);
-
-            // Second lobe further out for teardrop effect
-            const lobe2 = new THREE.Mesh(loneGeom, loneMat.clone());
-            lobe2.material.opacity = 0.2;
-            lobe2.position.copy(dir.clone().multiplyScalar(bondLen * 1.35));
-            lobe2.scale.set(1.6, 1.6, 1.6);
-            molGroup.add(lobe2);
         } else {
             // Bonding atom
             const atom = new THREE.Mesh(outerGeom, bondingMat);
