@@ -416,6 +416,8 @@
             <div class="toggle-row">
                 <button class="toggle-btn" id="theme-toggle">Dark mode</button>
                 <button class="toggle-btn" id="angle-toggle">Show angles</button>
+                <button class="toggle-btn" id="lp-toggle">Hide lone pairs</button>
+                <button class="toggle-btn" id="reset-view">Reset view</button>
             </div>
         </div>
 
@@ -636,6 +638,7 @@ scene.add(anglesGroup);
 let currentBonding = 4;
 let currentLone = 0;
 let showAngles = false;
+let showLonePairs = true;
 
 const arcMat = new LineMaterial({ color: 0xcc4455, linewidth: 3, worldUnits: false });
 arcMat.resolution.set(window.innerWidth, window.innerHeight);
@@ -738,6 +741,8 @@ function buildMolecule(nBonding, nLone) {
     positions.forEach((dir, i) => {
         const isLone = loneIndices.has(i);
         const pos = dir.clone().multiplyScalar(bondLen);
+
+        if (isLone && !showLonePairs) return;
 
         // Stick
         const stick = new THREE.Mesh(stickGeom, isLone ? loneStickMat : stickMat);
@@ -917,6 +922,23 @@ angleToggle.addEventListener('click', () => {
     angleToggle.classList.toggle('on', showAngles);
     angleToggle.textContent = showAngles ? 'Hide angles' : 'Show angles';
     buildAngleArcs(currentBonding, currentLone);
+});
+
+// Lone pair toggle
+const lpToggle = document.getElementById('lp-toggle');
+lpToggle.addEventListener('click', () => {
+    showLonePairs = !showLonePairs;
+    lpToggle.classList.toggle('on', !showLonePairs);
+    lpToggle.textContent = showLonePairs ? 'Hide lone pairs' : 'Show lone pairs';
+    update();
+});
+
+// Reset view
+document.getElementById('reset-view').addEventListener('click', () => {
+    camera.position.set(3.5, 2.5, 3.5);
+    controls.target.set(0, 0, 0);
+    controls.autoRotate = true;
+    controls.update();
 });
 
 // Panel resize handle
