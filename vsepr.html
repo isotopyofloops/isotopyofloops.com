@@ -16,8 +16,70 @@
     }
     </script>
     <style>
-        body { max-width: none; padding: 0; }
-        nav { max-width: 660px; margin: 0 auto; padding: 1.5em 1.5em 0.8em; }
+        :root {
+            --bg: #08080f;
+            --bg-viewer: #06060c;
+            --bg-surface: #12121e;
+            --border: #1a1a2a;
+            --border-subtle: #141420;
+            --text: #c8c8c8;
+            --text-bright: #e0e0e8;
+            --text-dim: #555;
+            --text-mid: #666;
+            --label: #7a8aaa;
+            --accent: #7a9fd4;
+            --accent-hover: #a0b0cc;
+            --slider-track: #1e1e2e;
+            --btn-bg: #12121e;
+            --btn-active-bg: #1a1a30;
+            --thumb-border: #08080f;
+        }
+        :root[data-theme="light"],
+        :root.light {
+            --bg: #f4f4f0;
+            --bg-viewer: #e8e8e4;
+            --bg-surface: #ffffff;
+            --border: #d0d0cc;
+            --border-subtle: #dcdcd8;
+            --text: #3a3a3a;
+            --text-bright: #1a1a1a;
+            --text-dim: #888;
+            --text-mid: #777;
+            --label: #5a6878;
+            --accent: #3a6ea5;
+            --accent-hover: #2a5580;
+            --slider-track: #d0d0cc;
+            --btn-bg: #eaeae6;
+            --btn-active-bg: #d8dce8;
+            --thumb-border: #f4f4f0;
+        }
+        @media (prefers-color-scheme: light) {
+            :root:not([data-theme="dark"]) {
+                --bg: #f4f4f0;
+                --bg-viewer: #e8e8e4;
+                --bg-surface: #ffffff;
+                --border: #d0d0cc;
+                --border-subtle: #dcdcd8;
+                --text: #3a3a3a;
+                --text-bright: #1a1a1a;
+                --text-dim: #888;
+                --text-mid: #777;
+                --label: #5a6878;
+                --accent: #3a6ea5;
+                --accent-hover: #2a5580;
+                --slider-track: #d0d0cc;
+                --btn-bg: #eaeae6;
+                --btn-active-bg: #d8dce8;
+                --thumb-border: #f4f4f0;
+            }
+        }
+
+        body { max-width: none; padding: 0; background: var(--bg); color: var(--text); }
+        nav { max-width: 660px; margin: 0 auto; padding: 1.5em 1.5em 0.8em; border-bottom-color: var(--border); }
+        nav a { color: var(--text-dim); }
+        nav a:hover { color: var(--text); }
+        nav .site-name { color: var(--label); }
+        nav .site-name:hover { color: var(--accent-hover); }
 
         .vsepr-layout {
             display: grid;
@@ -28,8 +90,8 @@
 
         .viewer-panel {
             position: relative;
-            background: #06060c;
-            border-right: 1px solid #1a1a2a;
+            background: var(--bg-viewer);
+            border-right: 1px solid var(--border);
         }
         #mol-canvas {
             width: 100%;
@@ -48,7 +110,7 @@
         .geometry-label .electron-geom {
             font-family: 'Courier New', monospace;
             font-size: 0.72em;
-            color: #555;
+            color: var(--text-dim);
             letter-spacing: 0.05em;
             text-transform: uppercase;
         }
@@ -56,20 +118,20 @@
             font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
             font-weight: 300;
             font-size: 1.6em;
-            color: #e0e0e8;
+            color: var(--text-bright);
             line-height: 1.2;
         }
         .geometry-label .formula {
             font-family: 'Courier New', monospace;
             font-size: 0.82em;
-            color: #7a8aaa;
+            color: var(--label);
             margin-top: 0.3em;
         }
 
         .controls-panel {
             padding: 1.8em 1.5em;
             overflow-y: auto;
-            border-left: 1px solid #1a1a2a;
+            border-left: 1px solid var(--border);
         }
 
         .control-group {
@@ -79,7 +141,7 @@
             display: block;
             font-family: 'Courier New', monospace;
             font-size: 0.75em;
-            color: #7a8aaa;
+            color: var(--label);
             letter-spacing: 0.06em;
             text-transform: uppercase;
             margin-bottom: 0.6em;
@@ -95,7 +157,7 @@
             -webkit-appearance: none;
             appearance: none;
             height: 3px;
-            background: #1e1e2e;
+            background: var(--slider-track);
             border-radius: 2px;
             outline: none;
         }
@@ -104,22 +166,22 @@
             width: 14px;
             height: 14px;
             border-radius: 50%;
-            background: #7a9fd4;
+            background: var(--accent);
             cursor: pointer;
-            border: 2px solid #08080f;
+            border: 2px solid var(--thumb-border);
         }
         .slider-row input[type="range"]::-moz-range-thumb {
             width: 14px;
             height: 14px;
             border-radius: 50%;
-            background: #7a9fd4;
+            background: var(--accent);
             cursor: pointer;
-            border: 2px solid #08080f;
+            border: 2px solid var(--thumb-border);
         }
         .slider-value {
             font-family: 'Courier New', monospace;
             font-size: 1.1em;
-            color: #e0e0e8;
+            color: var(--text-bright);
             min-width: 1.5em;
             text-align: center;
         }
@@ -127,13 +189,13 @@
         .info-block {
             margin-bottom: 1.6em;
             padding-bottom: 1.6em;
-            border-bottom: 1px solid #141420;
+            border-bottom: 1px solid var(--border-subtle);
         }
         .info-block:last-child { border-bottom: none; }
         .info-label {
             font-family: 'Courier New', monospace;
             font-size: 0.72em;
-            color: #555;
+            color: var(--text-dim);
             letter-spacing: 0.06em;
             text-transform: uppercase;
             margin-bottom: 0.3em;
@@ -141,19 +203,19 @@
         .info-value {
             font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
             font-size: 1em;
-            color: #c0c0d4;
+            color: var(--text);
             font-weight: 300;
         }
-        .info-value .dim { color: #555; }
+        .info-value .dim { color: var(--text-dim); }
         .info-value .angle {
             font-family: 'Courier New', monospace;
-            color: #7a9fd4;
+            color: var(--accent);
             font-size: 0.9em;
         }
 
         .example-molecule {
             font-size: 0.88em;
-            color: #666;
+            color: var(--text-mid);
             margin-top: 0.3em;
             font-style: italic;
         }
@@ -170,7 +232,7 @@
             gap: 0.4em;
             font-family: 'Courier New', monospace;
             font-size: 0.72em;
-            color: #666;
+            color: var(--text-mid);
             letter-spacing: 0.03em;
         }
         .legend-dot {
@@ -187,9 +249,9 @@
         .preset-btn {
             font-family: 'Courier New', monospace;
             font-size: 0.72em;
-            color: #7a8aaa;
-            background: #12121e;
-            border: 1px solid #1e1e2e;
+            color: var(--label);
+            background: var(--btn-bg);
+            border: 1px solid var(--border);
             border-radius: 3px;
             padding: 0.3em 0.6em;
             cursor: pointer;
@@ -197,13 +259,13 @@
             transition: all 0.15s;
         }
         .preset-btn:hover {
-            border-color: #7a9fd4;
-            color: #c0c0d4;
+            border-color: var(--accent);
+            color: var(--text);
         }
         .preset-btn.active {
-            border-color: #7a9fd4;
-            background: #1a1a30;
-            color: #e0e0e8;
+            border-color: var(--accent);
+            background: var(--btn-active-bg);
+            color: var(--text-bright);
         }
 
         .toggle-row {
@@ -215,9 +277,9 @@
         .toggle-btn {
             font-family: 'Courier New', monospace;
             font-size: 0.75em;
-            color: #7a8aaa;
-            background: #12121e;
-            border: 1px solid #1e1e2e;
+            color: var(--label);
+            background: var(--btn-bg);
+            border: 1px solid var(--border);
             border-radius: 3px;
             padding: 0.4em 0.8em;
             cursor: pointer;
@@ -226,14 +288,73 @@
             text-transform: uppercase;
         }
         .toggle-btn:hover {
-            border-color: #7a9fd4;
-            color: #c0c0d4;
+            border-color: var(--accent);
+            color: var(--text);
         }
         .toggle-btn.on {
-            border-color: #7a9fd4;
-            background: #1a1a30;
-            color: #e0e0e8;
+            border-color: var(--accent);
+            background: var(--btn-active-bg);
+            color: var(--text-bright);
         }
+
+        /* AXE taxonomy table */
+        .axe-table-wrap {
+            overflow-x: auto;
+            margin-top: 0.5em;
+        }
+        .axe-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Courier New', monospace;
+            font-size: 0.68em;
+            letter-spacing: 0.02em;
+        }
+        .axe-table th {
+            color: var(--text-dim);
+            text-transform: uppercase;
+            font-weight: normal;
+            text-align: left;
+            padding: 0.4em 0.5em;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+        .axe-table td {
+            color: var(--text);
+            padding: 0.35em 0.5em;
+            border-bottom: 1px solid var(--border-subtle);
+            white-space: nowrap;
+        }
+        .axe-table tr { cursor: pointer; transition: background 0.1s; }
+        .axe-table tr:hover { background: var(--btn-bg); }
+        .axe-table tr.active-row { background: var(--btn-active-bg); }
+        .axe-table .lp-col { color: var(--accent); }
+        .axe-table .geom-col { color: var(--label); }
+        .axe-table .steric-header {
+            color: var(--label);
+            font-size: 1.05em;
+            padding: 0.6em 0.5em 0.3em;
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* Theme toggle */
+        .theme-toggle {
+            position: absolute;
+            top: 1em;
+            right: 1em;
+            font-family: 'Courier New', monospace;
+            font-size: 0.7em;
+            color: var(--label);
+            background: var(--btn-bg);
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            padding: 0.35em 0.7em;
+            cursor: pointer;
+            letter-spacing: 0.04em;
+            transition: all 0.15s;
+            z-index: 10;
+            text-transform: uppercase;
+        }
+        .theme-toggle:hover { border-color: var(--accent); color: var(--text); }
 
         /* Responsive */
         @media (max-width: 768px) {
@@ -242,7 +363,7 @@
                 grid-template-rows: 50vh auto;
                 height: auto;
             }
-            .viewer-panel { border-right: none; border-bottom: 1px solid #1a1a2a; }
+            .viewer-panel { border-right: none; border-bottom: 1px solid var(--border); }
             .controls-panel { border-left: none; padding: 1.5em; }
         }
 
@@ -269,6 +390,7 @@
 
 <div class="vsepr-layout">
     <div class="viewer-panel">
+        <button class="theme-toggle" id="theme-toggle">light</button>
         <canvas id="mol-canvas"></canvas>
         <div class="geometry-label">
             <div class="electron-geom" id="electron-geom-label">electron geometry: tetrahedral</div>
@@ -294,14 +416,9 @@
             </div>
         </div>
 
-        <div class="control-group">
-            <label>Presets</label>
-            <div class="presets" id="presets"></div>
-        </div>
-
         <div class="info-block">
             <div class="info-label">Bond angles</div>
-            <div class="info-value" id="bond-angles">109.5°</div>
+            <div class="info-value" id="bond-angles"><span class="angle">109.5°</span></div>
         </div>
 
         <div class="info-block">
@@ -334,9 +451,21 @@
             </div>
         </div>
 
+        <div class="info-block">
+            <div class="info-label">VSEPR Taxonomy</div>
+            <div class="axe-table-wrap">
+                <table class="axe-table" id="axe-table">
+                    <thead>
+                        <tr><th>AXE</th><th>LP</th><th>Shape</th><th>Angles</th><th>Example</th></tr>
+                    </thead>
+                    <tbody id="axe-tbody"></tbody>
+                </table>
+            </div>
+        </div>
+
         <div class="info-block" style="border-bottom:none;">
             <div class="info-label">About</div>
-            <p style="font-size:0.85em; color:#555; line-height:1.6; margin:0.3em 0 0;">
+            <p style="font-size:0.85em; color:var(--text-dim); line-height:1.6; margin:0.3em 0 0;">
                 Valence Shell Electron Pair Repulsion theory predicts molecular geometry
                 from the number of electron domains around a central atom. Electron domains
                 (bonding + lone pairs) repel each other and arrange to maximize separation.
@@ -370,20 +499,6 @@ const GEOM_DATA = {
     '4_2': { electronGeom: 'Octahedral', molGeom: 'Square Planar', angles: '90°', hybrid: 'sp³d²', axe: 'AX₄E₂', example: 'XeF₄, [PtCl₄]²⁻' },
 };
 
-const PRESETS = [
-    { label: 'CO₂', b: 2, l: 0 },
-    { label: 'BF₃', b: 3, l: 0 },
-    { label: 'SO₂', b: 2, l: 1 },
-    { label: 'CH₄', b: 4, l: 0 },
-    { label: 'NH₃', b: 3, l: 1 },
-    { label: 'H₂O', b: 2, l: 2 },
-    { label: 'PCl₅', b: 5, l: 0 },
-    { label: 'SF₄', b: 4, l: 1 },
-    { label: 'ClF₃', b: 3, l: 2 },
-    { label: 'SF₆', b: 6, l: 0 },
-    { label: 'BrF₅', b: 5, l: 1 },
-    { label: 'XeF₄', b: 4, l: 2 },
-];
 
 function electronPositions(steric) {
     const pos = [];
@@ -643,11 +758,11 @@ function updateInfo(nBonding, nLone) {
     document.getElementById('example-mol').textContent = data.example;
 }
 
-function updatePresetHighlight(nBonding, nLone) {
-    document.querySelectorAll('.preset-btn').forEach(btn => {
-        const b = parseInt(btn.dataset.b);
-        const l = parseInt(btn.dataset.l);
-        btn.classList.toggle('active', b === nBonding && l === nLone);
+function updateTableHighlight(nBonding, nLone) {
+    document.querySelectorAll('#axe-tbody tr').forEach(row => {
+        const b = parseInt(row.dataset.b);
+        const l = parseInt(row.dataset.l);
+        row.classList.toggle('active-row', b === nBonding && l === nLone);
     });
 }
 
@@ -664,7 +779,7 @@ function update() {
     buildMolecule(nBonding, nLone);
     buildAngleArcs(nBonding, nLone);
     updateInfo(nBonding, nLone);
-    updatePresetHighlight(nBonding, nLone);
+    updateTableHighlight(nBonding, nLone);
 }
 
 // Sliders
@@ -692,25 +807,40 @@ loneSlider.addEventListener('input', () => {
     update();
 });
 
-// Presets
-const presetsEl = document.getElementById('presets');
-PRESETS.forEach(p => {
-    const btn = document.createElement('button');
-    btn.className = 'preset-btn';
-    btn.textContent = p.label;
-    btn.dataset.b = p.b;
-    btn.dataset.l = p.l;
-    btn.addEventListener('click', () => {
-        currentBonding = p.b;
-        currentLone = p.l;
-        bondingSlider.value = currentBonding;
-        loneSlider.value = currentLone;
-        loneSlider.max = Math.min(3, 6 - currentBonding);
-        bondingValue.textContent = currentBonding;
-        loneValue.textContent = currentLone;
-        update();
+// AXE taxonomy table
+const tbody = document.getElementById('axe-tbody');
+const stericGroups = [
+    { sn: 2, label: 'Steric 2 — Linear', keys: ['2_0'] },
+    { sn: 3, label: 'Steric 3 — Trigonal Planar', keys: ['3_0', '2_1'] },
+    { sn: 4, label: 'Steric 4 — Tetrahedral', keys: ['4_0', '3_1', '2_2'] },
+    { sn: 5, label: 'Steric 5 — Trigonal Bipyramidal', keys: ['5_0', '4_1', '3_2', '2_3'] },
+    { sn: 6, label: 'Steric 6 — Octahedral', keys: ['6_0', '5_1', '4_2'] },
+];
+stericGroups.forEach(g => {
+    const hdr = document.createElement('tr');
+    hdr.innerHTML = `<td colspan="5" class="steric-header">${g.label}</td>`;
+    hdr.style.cursor = 'default';
+    tbody.appendChild(hdr);
+    g.keys.forEach(key => {
+        const d = GEOM_DATA[key];
+        if (!d) return;
+        const [b, l] = key.split('_').map(Number);
+        const row = document.createElement('tr');
+        row.dataset.b = b;
+        row.dataset.l = l;
+        row.innerHTML = `<td>${d.axe}</td><td class="lp-col">${l}</td><td class="geom-col">${d.molGeom}</td><td>${d.angles}</td><td>${d.example.split(',')[0]}</td>`;
+        row.addEventListener('click', () => {
+            currentBonding = b;
+            currentLone = l;
+            bondingSlider.value = currentBonding;
+            loneSlider.value = currentLone;
+            loneSlider.max = Math.min(3, 6 - currentBonding);
+            bondingValue.textContent = currentBonding;
+            loneValue.textContent = currentLone;
+            update();
+        });
+        tbody.appendChild(row);
     });
-    presetsEl.appendChild(btn);
 });
 
 // Angle toggle
@@ -731,6 +861,29 @@ function resize() {
 }
 window.addEventListener('resize', resize);
 resize();
+
+// Theme toggle
+const themeBtn = document.getElementById('theme-toggle');
+function isDark() {
+    const dt = document.documentElement.getAttribute('data-theme');
+    if (dt) return dt === 'dark';
+    return !document.documentElement.classList.contains('light');
+}
+function applyTheme(dark) {
+    if (dark) {
+        document.documentElement.removeAttribute('data-theme');
+        document.documentElement.classList.remove('light');
+        renderer.setClearColor(0x06060c);
+        themeBtn.textContent = 'light';
+    } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        document.documentElement.classList.add('light');
+        renderer.setClearColor(0xe8e8e4);
+        themeBtn.textContent = 'dark';
+    }
+}
+if (window.matchMedia('(prefers-color-scheme: light)').matches) applyTheme(false);
+themeBtn.addEventListener('click', () => applyTheme(isDark()));
 
 // Animate
 function animate() {
