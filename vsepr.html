@@ -39,18 +39,18 @@
             --bg: #f4f4f0;
             --bg-viewer: #e8e8e4;
             --bg-surface: #ffffff;
-            --border: #d0d0cc;
-            --border-subtle: #dcdcd8;
-            --text: #3a3a3a;
-            --text-bright: #1a1a1a;
-            --text-dim: #888;
-            --text-mid: #777;
-            --label: #5a6878;
-            --accent: #3a6ea5;
-            --accent-hover: #2a5580;
-            --slider-track: #d0d0cc;
-            --btn-bg: #eaeae6;
-            --btn-active-bg: #d8dce8;
+            --border: #c0c0b8;
+            --border-subtle: #d0d0c8;
+            --text: #222;
+            --text-bright: #111;
+            --text-dim: #555;
+            --text-mid: #444;
+            --label: #3a4a5a;
+            --accent: #2a5a8c;
+            --accent-hover: #1e4570;
+            --slider-track: #c0c0b8;
+            --btn-bg: #e4e4e0;
+            --btn-active-bg: #d0d4e0;
             --thumb-border: #f4f4f0;
         }
         @media (prefers-color-scheme: light) {
@@ -58,18 +58,18 @@
                 --bg: #f4f4f0;
                 --bg-viewer: #e8e8e4;
                 --bg-surface: #ffffff;
-                --border: #d0d0cc;
-                --border-subtle: #dcdcd8;
-                --text: #3a3a3a;
-                --text-bright: #1a1a1a;
-                --text-dim: #888;
-                --text-mid: #777;
-                --label: #5a6878;
-                --accent: #3a6ea5;
-                --accent-hover: #2a5580;
-                --slider-track: #d0d0cc;
-                --btn-bg: #eaeae6;
-                --btn-active-bg: #d8dce8;
+                --border: #c0c0b8;
+                --border-subtle: #d0d0c8;
+                --text: #222;
+                --text-bright: #111;
+                --text-dim: #555;
+                --text-mid: #444;
+                --label: #3a4a5a;
+                --accent: #2a5a8c;
+                --accent-hover: #1e4570;
+                --slider-track: #c0c0b8;
+                --btn-bg: #e4e4e0;
+                --btn-active-bg: #d0d4e0;
                 --thumb-border: #f4f4f0;
             }
         }
@@ -83,7 +83,7 @@
 
         .vsepr-layout {
             display: grid;
-            grid-template-columns: 1fr 320px;
+            grid-template-columns: 1fr 6px var(--panel-width, 320px);
             height: calc(100vh - 80px);
             min-height: 500px;
         }
@@ -91,7 +91,19 @@
         .viewer-panel {
             position: relative;
             background: var(--bg-viewer);
-            border-right: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .resize-handle {
+            background: var(--border);
+            cursor: col-resize;
+            position: relative;
+            z-index: 20;
+            transition: background 0.15s;
+        }
+        .resize-handle:hover,
+        .resize-handle.dragging {
+            background: var(--accent);
         }
         #mol-canvas {
             width: 100%;
@@ -131,7 +143,6 @@
         .controls-panel {
             padding: 1.8em 1.5em;
             overflow-y: auto;
-            border-left: 1px solid var(--border);
         }
 
         .control-group {
@@ -330,10 +341,16 @@
         .axe-table .lp-col { color: var(--accent); }
         .axe-table .geom-col { color: var(--label); }
         .axe-table .steric-header {
-            color: var(--label);
-            font-size: 1.05em;
-            padding: 0.6em 0.5em 0.3em;
+            color: var(--text-bright);
+            font-size: 1.15em;
+            font-weight: bold;
+            padding: 1em 0.5em 0.4em;
+            border-top: 2px solid var(--border);
             border-bottom: 1px solid var(--border);
+            letter-spacing: 0.03em;
+        }
+        .axe-table tbody tr:first-child .steric-header {
+            border-top: none;
         }
 
         /* Theme toggle */
@@ -359,12 +376,13 @@
         /* Responsive */
         @media (max-width: 768px) {
             .vsepr-layout {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr !important;
                 grid-template-rows: 50vh auto;
                 height: auto;
             }
-            .viewer-panel { border-right: none; border-bottom: 1px solid var(--border); }
-            .controls-panel { border-left: none; padding: 1.5em; }
+            .resize-handle { display: none; }
+            .viewer-panel { border-bottom: 1px solid var(--border); }
+            .controls-panel { padding: 1.5em; }
         }
 
         footer {
@@ -398,6 +416,8 @@
             <div class="formula" id="formula-label">AX₄E₀</div>
         </div>
     </div>
+
+    <div class="resize-handle" id="resize-handle"></div>
 
     <div class="controls-panel">
         <div class="control-group">
@@ -621,7 +641,7 @@ let currentBonding = 4;
 let currentLone = 0;
 let showAngles = false;
 
-const arcMat = new THREE.LineBasicMaterial({ color: 0xd4a843, linewidth: 1 });
+const arcMat = new THREE.LineBasicMaterial({ color: 0xcc4455, linewidth: 1 });
 
 function makeAngleLabel(text) {
     const c = document.createElement('canvas');
@@ -629,7 +649,7 @@ function makeAngleLabel(text) {
     const ctx = c.getContext('2d');
     ctx.clearRect(0, 0, 128, 48);
     ctx.font = 'bold 28px Courier New, monospace';
-    ctx.fillStyle = '#d4a843';
+    ctx.fillStyle = '#cc4455';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(text, 64, 24);
@@ -895,6 +915,32 @@ angleToggle.addEventListener('click', () => {
     angleToggle.classList.toggle('on', showAngles);
     angleToggle.textContent = showAngles ? 'Hide angles' : 'Show angles';
     buildAngleArcs(currentBonding, currentLone);
+});
+
+// Panel resize handle
+const layoutEl = document.querySelector('.vsepr-layout');
+const handle = document.getElementById('resize-handle');
+let dragging = false;
+handle.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    dragging = true;
+    handle.classList.add('dragging');
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+});
+window.addEventListener('mousemove', (e) => {
+    if (!dragging) return;
+    const layoutRect = layoutEl.getBoundingClientRect();
+    const panelW = Math.max(240, Math.min(600, layoutRect.right - e.clientX));
+    layoutEl.style.setProperty('--panel-width', panelW + 'px');
+    resize();
+});
+window.addEventListener('mouseup', () => {
+    if (!dragging) return;
+    dragging = false;
+    handle.classList.remove('dragging');
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
 });
 
 // Resize
