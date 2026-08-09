@@ -20,18 +20,36 @@
             --bg: #08080f;
             --bg-viewer: #06060c;
             --bg-surface: #12121e;
-            --border: #1a1a2a;
-            --border-subtle: #141420;
-            --text: #c8c8c8;
-            --text-bright: #e0e0e8;
-            --text-dim: #555;
-            --text-mid: #666;
-            --label: #7a8aaa;
+            --border: #1e1e2e;
+            --border-subtle: #181828;
+            --text: #d4d4d4;
+            --text-bright: #ebebf0;
+            --text-dim: #8a8aa0;
+            --text-mid: #a0a0b4;
+            --label: #8a9abb;
             --accent: #7a9fd4;
             --accent-hover: #a0b0cc;
             --slider-track: #1e1e2e;
-            --btn-bg: #12121e;
-            --btn-active-bg: #1a1a30;
+            --btn-bg: #14141f;
+            --btn-active-bg: #1e1e32;
+            --thumb-border: #08080f;
+        }
+        :root[data-theme="dark"] {
+            --bg: #08080f;
+            --bg-viewer: #06060c;
+            --bg-surface: #12121e;
+            --border: #1e1e2e;
+            --border-subtle: #181828;
+            --text: #d4d4d4;
+            --text-bright: #ebebf0;
+            --text-dim: #8a8aa0;
+            --text-mid: #a0a0b4;
+            --label: #8a9abb;
+            --accent: #7a9fd4;
+            --accent-hover: #a0b0cc;
+            --slider-track: #1e1e2e;
+            --btn-bg: #14141f;
+            --btn-active-bg: #1e1e32;
             --thumb-border: #08080f;
         }
         :root[data-theme="light"],
@@ -401,6 +419,13 @@
     <div class="resize-handle" id="resize-handle"></div>
 
     <div class="controls-panel">
+        <div class="info-block" style="margin-bottom:0.5em; padding-bottom:1em;">
+            <div class="toggle-row">
+                <button class="toggle-btn" id="theme-toggle">Dark mode</button>
+                <button class="toggle-btn" id="angle-toggle">Show angles</button>
+            </div>
+        </div>
+
         <div class="info-block">
             <div class="info-label">Molecules</div>
             <div class="presets" id="presets"></div>
@@ -431,13 +456,6 @@
             <div class="slider-row">
                 <input type="range" id="lone-slider" min="0" max="3" value="0" step="1">
                 <span class="slider-value" id="lone-value">0</span>
-            </div>
-        </div>
-
-        <div class="info-block">
-            <div class="toggle-row">
-                <button class="toggle-btn" id="angle-toggle">Show angles</button>
-                <button class="toggle-btn" id="theme-toggle">light</button>
             </div>
         </div>
 
@@ -595,7 +613,7 @@ controls.autoRotateSpeed = 0.8;
 controls.addEventListener('start', () => { controls.autoRotate = false; });
 
 // Lighting
-const ambientLight = new THREE.AmbientLight(0x404060, 0.6);
+const ambientLight = new THREE.AmbientLight(0x404060, 0.75);
 scene.add(ambientLight);
 const dirLight = new THREE.DirectionalLight(0xc8c8e0, 1.0);
 dirLight.position.set(5, 8, 5);
@@ -605,11 +623,11 @@ fillLight.position.set(-3, -2, -5);
 scene.add(fillLight);
 
 // Materials
-const centralMat = new THREE.MeshStandardMaterial({ color: 0x5588cc, roughness: 0.3, metalness: 0.1 });
-const bondingMat = new THREE.MeshStandardMaterial({ color: 0xc0c0d4, roughness: 0.4, metalness: 0.05 });
-const loneMat = new THREE.MeshStandardMaterial({ color: 0x7a5a9f, roughness: 0.6, transparent: true, opacity: 0.4 });
-const stickMat = new THREE.MeshStandardMaterial({ color: 0x888898, roughness: 0.5 });
-const loneStickMat = new THREE.MeshStandardMaterial({ color: 0x7a5a9f, roughness: 0.5, transparent: true, opacity: 0.25 });
+const centralMat = new THREE.MeshStandardMaterial({ color: 0x6699dd, roughness: 0.3, metalness: 0.1 });
+const bondingMat = new THREE.MeshStandardMaterial({ color: 0xd0d0e0, roughness: 0.35, metalness: 0.05 });
+const loneMat = new THREE.MeshStandardMaterial({ color: 0x8a6ab0, roughness: 0.6, transparent: true, opacity: 0.4 });
+const stickMat = new THREE.MeshStandardMaterial({ color: 0x9898a8, roughness: 0.5 });
+const loneStickMat = new THREE.MeshStandardMaterial({ color: 0x8a6ab0, roughness: 0.5, transparent: true, opacity: 0.25 });
 
 // Shared geometries
 const centralGeom = new THREE.SphereGeometry(0.28, 32, 32);
@@ -948,15 +966,15 @@ function isDark() {
 }
 function applyTheme(dark) {
     if (dark) {
-        document.documentElement.removeAttribute('data-theme');
+        document.documentElement.setAttribute('data-theme', 'dark');
         document.documentElement.classList.remove('light');
         renderer.setClearColor(0x06060c);
-        themeBtn.textContent = 'light';
+        themeBtn.textContent = 'Light mode';
     } else {
         document.documentElement.setAttribute('data-theme', 'light');
         document.documentElement.classList.add('light');
         renderer.setClearColor(0xf5f5f5);
-        themeBtn.textContent = 'dark';
+        themeBtn.textContent = 'Dark mode';
     }
 }
 if (window.matchMedia('(prefers-color-scheme: light)').matches) applyTheme(false);
