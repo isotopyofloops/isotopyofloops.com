@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D Brain Atlas — isotopy</title>
+<meta name="description" content="Interactive 3D brain atlas. 47 structures from BodyParts3D, color-coded by region. Click to identify structures.">
+<link rel="alternate" type="text/plain" href="/llms.txt" title="Machine-readable site description">
+<link rel="stylesheet" href="../style.css">
+<script type="importmap">
+{
+    "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+    }
+}
+</script>
+<style>
+    :root {
+        --bg: #16181d;
+        --bg-surface: #1e2128;
+        --border: #2d333b;
+        --text: #e1e4e8;
+        --text-bright: #f0f2f5;
+        --text-dim: #8b949e;
+        --text-mid: #adb5bd;
+        --accent: #6baecb;
+        --accent-hover: #8ac4db;
+        --frontal: #6baecb;
+        --parietal: #c7b563;
+        --temporal: #5cc77a;
+        --occipital: #a86bc7;
+        --limbic: #d98c5c;
+        --subcortical: #59a59e;
+        --brainstem: #8a8f70;
+        --cerebellum: #c4856b;
+        --ventricular: #6699d8;
+        --white-matter: #bfbfbf;
+        --btn-bg: #1e2128;
+        --btn-active-bg: #2d333b;
+        --viewer-bg: #0e1015;
+    }
+    :root[data-theme="dark"] {
+        --bg: #16181d;
+        --bg-surface: #1e2128;
+        --border: #2d333b;
+        --text: #e1e4e8;
+        --text-bright: #f0f2f5;
+        --text-dim: #8b949e;
+        --text-mid: #adb5bd;
+        --accent: #6baecb;
+        --accent-hover: #8ac4db;
+        --btn-bg: #1e2128;
+        --btn-active-bg: #2d333b;
+        --viewer-bg: #0e1015;
+    }
+    :root[data-theme="light"],
+    :root.light {
+        --bg: #f6f7f9;
+        --bg-surface: #ffffff;
+        --border: #e2e5ea;
+        --text: #2a2d32;
+        --text-bright: #1a1d22;
+        --text-dim: #6b7280;
+        --text-mid: #4b5563;
+        --accent: #4a8da8;
+        --accent-hover: #3a7d98;
+        --btn-bg: #f0f1f3;
+        --btn-active-bg: #e2e5ea;
+        --viewer-bg: #e8eaed;
+    }
+    @media (prefers-color-scheme: light) {
+        :root:not([data-theme="dark"]) {
+            --bg: #f6f7f9;
+            --bg-surface: #ffffff;
+            --border: #e2e5ea;
+            --text: #2a2d32;
+            --text-bright: #1a1d22;
+            --text-dim: #6b7280;
+            --text-mid: #4b5563;
+            --accent: #4a8da8;
+            --accent-hover: #3a7d98;
+            --btn-bg: #f0f1f3;
+            --btn-active-bg: #e2e5ea;
+            --viewer-bg: #e8eaed;
+        }
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'SF Mono', 'Fira Mono', 'Cascadia Mono', 'Consolas', monospace;
+        overflow: hidden;
+        height: 100vh;
+        max-width: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .viewer-layout {
+        display: grid;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr;
+        height: 100vh;
+    }
+
+    .top-bar {
+        grid-column: 1 / -1;
+        display: flex;
+        align-items: center;
+        gap: 1em;
+        padding: 0.5em 1em;
+        border-bottom: 1px solid var(--border);
+        background: var(--bg-surface);
+        font-size: 0.85em;
+    }
+
+    .top-bar a {
+        color: var(--text-dim);
+        text-decoration: none;
+    }
+    .top-bar a:hover { color: var(--accent); }
+    .top-bar .title {
+        color: var(--text-bright);
+        font-weight: 600;
+    }
+
+    #canvas-container {
+        position: relative;
+        background: var(--viewer-bg);
+        overflow: hidden;
+    }
+
+    canvas { display: block; width: 100%; height: 100%; }
+
+    #loading {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: var(--viewer-bg);
+        color: var(--text-dim);
+        font-size: 0.9em;
+        z-index: 10;
+    }
+    #loading .spinner {
+        width: 32px; height: 32px;
+        border: 3px solid var(--border);
+        border-top-color: var(--accent);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        margin-bottom: 1em;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #loading.hidden { display: none; }
+
+    #hover-label {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        padding: 0.4em 0.8em;
+        border-radius: 4px;
+        font-size: 0.85em;
+        color: var(--text-bright);
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.15s;
+    }
+    #hover-label.visible { opacity: 1; }
+
+    .side-panel {
+        background: var(--bg-surface);
+        border-left: 1px solid var(--border);
+        overflow-y: auto;
+        padding: 1em;
+        font-size: 0.82em;
+    }
+
+    .panel-section {
+        margin-bottom: 1.5em;
+    }
+    .panel-section h3 {
+        font-size: 0.75em;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--text-dim);
+        margin-bottom: 0.6em;
+        padding-bottom: 0.3em;
+        border-bottom: 1px solid var(--border);
+    }
+
+    #structure-info {
+        min-height: 80px;
+    }
+    #structure-name {
+        font-size: 1.1em;
+        font-weight: 600;
+        color: var(--text-bright);
+        margin-bottom: 0.3em;
+    }
+    #structure-region {
+        font-size: 0.85em;
+        margin-bottom: 0.4em;
+    }
+    #structure-chapters {
+        font-size: 0.82em;
+        color: var(--text-dim);
+        line-height: 1.5;
+    }
+    #structure-chapters a {
+        color: var(--accent);
+        text-decoration: none;
+    }
+    #structure-chapters a:hover { text-decoration: underline; }
+    .no-selection {
+        color: var(--text-dim);
+        font-style: italic;
+    }
+
+    .region-toggles {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35em;
+    }
+    .region-toggle {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+        cursor: pointer;
+        padding: 0.25em 0.4em;
+        border-radius: 3px;
+        transition: background 0.1s;
+        user-select: none;
+    }
+    .region-toggle:hover { background: var(--btn-active-bg); }
+    .region-toggle .swatch {
+        width: 12px; height: 12px;
+        border-radius: 2px;
+        flex-shrink: 0;
+    }
+    .region-toggle.dimmed {
+        opacity: 0.4;
+    }
+    .region-toggle .label {
+        flex: 1;
+        color: var(--text);
+    }
+    .region-toggle .count {
+        color: var(--text-dim);
+        font-size: 0.85em;
+    }
+
+    .view-btns {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.3em;
+    }
+    .view-btn {
+        background: var(--btn-bg);
+        border: 1px solid var(--border);
+        color: var(--text-mid);
+        padding: 0.3em 0.6em;
+        border-radius: 3px;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 0.9em;
+        transition: all 0.1s;
+    }
+    .view-btn:hover {
+        background: var(--btn-active-bg);
+        color: var(--text-bright);
+    }
+
+    .chapter-btns {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3em;
+    }
+    .chapter-btn {
+        background: var(--btn-bg);
+        border: 1px solid var(--border);
+        color: var(--text-mid);
+        padding: 0.35em 0.6em;
+        border-radius: 3px;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 0.88em;
+        text-align: left;
+        transition: all 0.1s;
+    }
+    .chapter-btn:hover {
+        background: var(--btn-active-bg);
+        color: var(--text-bright);
+    }
+    .chapter-btn.active {
+        background: var(--btn-active-bg);
+        border-color: var(--accent);
+        color: var(--text-bright);
+    }
+
+    .controls-hint {
+        color: var(--text-dim);
+        font-size: 0.8em;
+        line-height: 1.6;
+        margin-top: 0.5em;
+    }
+
+    @media (max-width: 768px) {
+        .viewer-layout {
+            grid-template-columns: 1fr;
+            grid-template-rows: auto 1fr auto;
+        }
+        .side-panel {
+            border-left: none;
+            border-top: 1px solid var(--border);
+            max-height: 40vh;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="viewer-layout">
+    <div class="top-bar">
+        <a href="/">isotopy</a>
+        <span style="color:var(--text-dim);">/</span>
+        <a href="/lab.html">lab</a>
+        <span style="color:var(--text-dim);">/</span>
+        <a href="/brain-atlas/">atlas</a>
+        <span style="color:var(--text-dim);">/</span>
+        <span class="title">3D Viewer</span>
+        <span style="flex:1;"></span>
+        <a href="/brain-atlas/" style="font-size:0.9em;">Back to atlas</a>
+    </div>
+
+    <div id="canvas-container">
+        <div id="loading">
+            <div class="spinner"></div>
+            Loading brain atlas (4.5 MB)...
+        </div>
+        <div id="hover-label"></div>
+    </div>
+
+    <div class="side-panel">
+        <div class="panel-section" id="structure-info">
+            <h3>Selected Structure</h3>
+            <div class="no-selection">Click a structure to identify it</div>
+        </div>
+
+        <div class="panel-section">
+            <h3>Regions</h3>
+            <div class="region-toggles" id="region-toggles"></div>
+        </div>
+
+        <div class="panel-section">
+            <h3>Chapter Mode</h3>
+            <div class="chapter-btns" id="chapter-btns"></div>
+        </div>
+
+        <div class="panel-section">
+            <h3>View</h3>
+            <div class="view-btns">
+                <button class="view-btn" data-view="anterior">Anterior</button>
+                <button class="view-btn" data-view="posterior">Posterior</button>
+                <button class="view-btn" data-view="lateral-l">Left</button>
+                <button class="view-btn" data-view="lateral-r">Right</button>
+                <button class="view-btn" data-view="superior">Superior</button>
+                <button class="view-btn" data-view="inferior">Inferior</button>
+                <button class="view-btn" data-view="reset">Reset</button>
+            </div>
+            <div class="controls-hint">
+                Drag to rotate · Scroll to zoom · Right-drag to pan
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+
+const REGIONS = {
+    frontal: {
+        label: 'Frontal Lobe', color: '#6baecb',
+        structures: ['inferior_frontal_gyrus','middle_frontal_gyrus','superior_frontal_gyrus','orbital_gyrus','precentral_gyrus']
+    },
+    parietal: {
+        label: 'Parietal Lobe', color: '#c7b563',
+        structures: ['postcentral_gyrus','superior_parietal_lobule','angular_gyrus','supramarginal_gyrus']
+    },
+    temporal: {
+        label: 'Temporal Lobe', color: '#5cc77a',
+        structures: ['superior_temporal_gyrus','middle_temporal_gyrus','inferior_temporal_gyrus','fusiform_gyrus','parahippocampal_gyrus']
+    },
+    occipital: {
+        label: 'Occipital Lobe', color: '#a86bc7',
+        structures: ['occipital_lobe']
+    },
+    limbic: {
+        label: 'Limbic System', color: '#d98c5c',
+        structures: ['amygdala','hippocampus','cingulate_gyrus','hypothalamus','mammillary_body','fornix','fornix_commissure']
+    },
+    subcortical: {
+        label: 'Basal Ganglia / Thalamus', color: '#59a59e',
+        structures: ['thalamus','caudate_nucleus','putamen','globus_pallidus','insula']
+    },
+    brainstem: {
+        label: 'Brainstem', color: '#8a8f70',
+        structures: ['midbrain','pons','medulla_oblongata','cerebral_peduncle','inferior_colliculus','superior_colliculus','pineal_gland']
+    },
+    cerebellum: {
+        label: 'Cerebellum', color: '#c4856b',
+        structures: ['cerebellum']
+    },
+    ventricular: {
+        label: 'Ventricles', color: '#6699d8',
+        structures: ['lateral_ventricle','third_ventricle','fourth_ventricle','choroid_plexus']
+    },
+    white_matter: {
+        label: 'White Matter / Tracts', color: '#bfbfbf',
+        structures: ['cerebral_white_matter','corpus_callosum','internal_capsule','anterior_commissure','posterior_commissure','stria_medullaris','optic_chiasm','optic_tract']
+    }
+};
+
+const CHAPTERS = {
+    'ch10': {
+        label: 'Ch 10 — Biological Rhythms',
+        url: '/brain-atlas/ch10-biological-rhythms-and-sleep.html',
+        structures: ['hypothalamus','pineal_gland','thalamus','pons','medulla_oblongata','midbrain']
+    },
+    'ch13': {
+        label: 'Ch 13 — Memory & Learning',
+        url: '/brain-atlas/ch13-memory-and-learning.html',
+        structures: ['hippocampus','amygdala','caudate_nucleus','cerebellum','mammillary_body','fornix','thalamus','cingulate_gyrus','parahippocampal_gyrus']
+    },
+    'ch14': {
+        label: 'Ch 14 — Attention & Cognition',
+        url: '/brain-atlas/ch14-attention-and-higher-cognition.html',
+        structures: ['superior_frontal_gyrus','middle_frontal_gyrus','inferior_frontal_gyrus','cingulate_gyrus','superior_parietal_lobule','angular_gyrus','supramarginal_gyrus','thalamus','insula']
+    },
+    'ch15': {
+        label: 'Ch 15 — Language & Lateralization',
+        url: '/brain-atlas/ch15-language-and-lateralization.html',
+        structures: ['inferior_frontal_gyrus','superior_temporal_gyrus','angular_gyrus','supramarginal_gyrus','insula','arcuate_fasciculus','corpus_callosum','anterior_commissure']
+    }
+};
+
+function normalizeStructureName(blenderName) {
+    return blenderName
+        .replace(/\s*\(FJ\d+\)/, '')
+        .replace(/\s*\(.*?\)$/, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '_')
+        .replace(/_+$/, '');
+}
+
+function getRegionForStructure(normName) {
+    for (const [regionKey, region] of Object.entries(REGIONS)) {
+        if (region.structures.includes(normName)) return regionKey;
+    }
+    return null;
+}
+
+function getChaptersForStructure(normName) {
+    const chapters = [];
+    for (const [chKey, ch] of Object.entries(CHAPTERS)) {
+        if (ch.structures.includes(normName)) chapters.push(chKey);
+    }
+    return chapters;
+}
+
+function prettyName(normName) {
+    return normName
+        .split('_')
+        .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(' ')
+        .replace('Gyrus Somatosensory', 'Gyrus (Somatosensory)')
+        .replace('Gyrus Motor Cortex', 'Gyrus (Motor Cortex)');
+}
+
+// --- Three.js setup ---
+const container = document.getElementById('canvas-container');
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+container.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+const rootTheme = document.documentElement.getAttribute('data-theme');
+const useDark = rootTheme === 'dark' || (rootTheme !== 'light' && isDark);
+scene.background = new THREE.Color(useDark ? 0x0e1015 : 0xe8eaed);
+
+const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 2000);
+camera.position.set(0, 50, 250);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.target.set(0, 20, 0);
+controls.update();
+
+// Lighting
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+scene.add(ambientLight);
+const dirLight1 = new THREE.DirectionalLight(0xffffff, 0.8);
+dirLight1.position.set(100, 200, 150);
+scene.add(dirLight1);
+const dirLight2 = new THREE.DirectionalLight(0xffffff, 0.3);
+dirLight2.position.set(-100, -50, -150);
+scene.add(dirLight2);
+
+// State
+const meshMap = new Map();
+const regionVisibility = {};
+Object.keys(REGIONS).forEach(r => regionVisibility[r] = true);
+let selectedMesh = null;
+let hoveredMesh = null;
+let activeChapter = null;
+const originalMaterials = new Map();
+const highlightColor = new THREE.Color(0xffffff);
+const dimOpacity = 0.12;
+
+// Raycaster
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+
+// Load model
+const dracoLoader = new DRACOLoader();
+dracoLoader.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/libs/draco/');
+const loader = new GLTFLoader();
+loader.setDRACOLoader(dracoLoader);
+
+loader.load('brain_atlas.glb', (gltf) => {
+    const model = gltf.scene;
+    scene.add(model);
+
+    model.traverse((child) => {
+        if (child.isMesh) {
+            const normName = normalizeStructureName(child.name);
+            if (!meshMap.has(normName)) meshMap.set(normName, []);
+            meshMap.get(normName).push(child);
+
+            child.material = child.material.clone();
+            child.material.transparent = true;
+            child.material.opacity = 1.0;
+            child.material.side = THREE.DoubleSide;
+            originalMaterials.set(child, {
+                color: child.material.color.clone(),
+                opacity: 1.0
+            });
+            child.userData.normName = normName;
+        }
+    });
+
+    // Center the model
+    const box = new THREE.Box3().setFromObject(model);
+    const center = box.getCenter(new THREE.Vector3());
+    const size = box.getSize(new THREE.Vector3());
+    model.position.sub(center);
+    model.position.y += size.y * 0.1;
+
+    controls.target.set(0, size.y * 0.1, 0);
+    camera.position.set(0, size.y * 0.4, size.z * 1.8);
+    controls.update();
+
+    document.getElementById('loading').classList.add('hidden');
+    buildRegionToggles();
+    buildChapterButtons();
+},
+(progress) => {
+    if (progress.total) {
+        const pct = Math.round(progress.loaded / progress.total * 100);
+        document.getElementById('loading').innerHTML =
+            `<div class="spinner"></div>Loading brain atlas... ${pct}%`;
+    }
+},
+(error) => {
+    document.getElementById('loading').innerHTML =
+        `<div style="color:#e55">Failed to load model.<br>WebGL may not be supported.</div>`;
+    console.error(error);
+});
+
+// Region toggles
+function buildRegionToggles() {
+    const container = document.getElementById('region-toggles');
+    container.innerHTML = '';
+    for (const [key, region] of Object.entries(REGIONS)) {
+        const count = region.structures.reduce((n, s) => n + (meshMap.has(s) ? 1 : 0), 0);
+        if (count === 0) continue;
+        const el = document.createElement('div');
+        el.className = 'region-toggle';
+        el.dataset.region = key;
+        el.innerHTML = `
+            <span class="swatch" style="background:${region.color};"></span>
+            <span class="label">${region.label}</span>
+            <span class="count">${count}</span>
+        `;
+        el.addEventListener('click', () => toggleRegion(key));
+        container.appendChild(el);
+    }
+}
+
+function toggleRegion(regionKey) {
+    regionVisibility[regionKey] = !regionVisibility[regionKey];
+    const visible = regionVisibility[regionKey];
+    const el = document.querySelector(`.region-toggle[data-region="${regionKey}"]`);
+    if (el) el.classList.toggle('dimmed', !visible);
+
+    REGIONS[regionKey].structures.forEach(s => {
+        const meshes = meshMap.get(s);
+        if (meshes) meshes.forEach(m => { m.visible = visible; });
+    });
+}
+
+// Chapter mode
+function buildChapterButtons() {
+    const container = document.getElementById('chapter-btns');
+    container.innerHTML = '';
+    for (const [key, ch] of Object.entries(CHAPTERS)) {
+        const btn = document.createElement('button');
+        btn.className = 'chapter-btn';
+        btn.textContent = ch.label;
+        btn.addEventListener('click', () => toggleChapter(key));
+        container.appendChild(btn);
+    }
+}
+
+function toggleChapter(chKey) {
+    if (activeChapter === chKey) {
+        activeChapter = null;
+        resetAllMaterials();
+        document.querySelectorAll('.chapter-btn').forEach(b => b.classList.remove('active'));
+        return;
+    }
+
+    activeChapter = chKey;
+    const chStructures = new Set(CHAPTERS[chKey].structures);
+
+    document.querySelectorAll('.chapter-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+
+    meshMap.forEach((meshes, normName) => {
+        const inChapter = chStructures.has(normName);
+        meshes.forEach(m => {
+            const orig = originalMaterials.get(m);
+            if (inChapter) {
+                m.material.color.copy(orig.color);
+                m.material.opacity = 1.0;
+                m.visible = true;
+            } else {
+                m.material.color.copy(orig.color);
+                m.material.opacity = dimOpacity;
+                m.visible = true;
+            }
+        });
+    });
+}
+
+function resetAllMaterials() {
+    meshMap.forEach((meshes, normName) => {
+        const regionKey = getRegionForStructure(normName);
+        const visible = regionKey ? regionVisibility[regionKey] : true;
+        meshes.forEach(m => {
+            const orig = originalMaterials.get(m);
+            m.material.color.copy(orig.color);
+            m.material.opacity = 1.0;
+            m.visible = visible;
+        });
+    });
+}
+
+// Selection & hover
+function selectStructure(normName) {
+    // Deselect previous
+    if (selectedMesh) {
+        const prevMeshes = meshMap.get(selectedMesh);
+        if (prevMeshes) {
+            prevMeshes.forEach(m => {
+                const orig = originalMaterials.get(m);
+                if (activeChapter) {
+                    const inCh = CHAPTERS[activeChapter].structures.includes(selectedMesh);
+                    m.material.opacity = inCh ? 1.0 : dimOpacity;
+                } else {
+                    m.material.opacity = 1.0;
+                }
+                m.material.color.copy(orig.color);
+                m.material.emissive?.set(0x000000);
+            });
+        }
+    }
+
+    selectedMesh = normName;
+
+    // Highlight new
+    const meshes = meshMap.get(normName);
+    if (meshes) {
+        meshes.forEach(m => {
+            m.material.opacity = 1.0;
+            if (m.material.emissive) m.material.emissive.set(0x333333);
+        });
+    }
+
+    // Update info panel
+    const infoEl = document.getElementById('structure-info');
+    const regionKey = getRegionForStructure(normName);
+    const region = regionKey ? REGIONS[regionKey] : null;
+    const chapters = getChaptersForStructure(normName);
+
+    let html = `<h3>Selected Structure</h3>`;
+    html += `<div id="structure-name">${prettyName(normName)}</div>`;
+    if (region) {
+        html += `<div id="structure-region" style="color:${region.color};">${region.label}</div>`;
+    }
+    if (chapters.length > 0) {
+        html += `<div id="structure-chapters">`;
+        chapters.forEach(chKey => {
+            const ch = CHAPTERS[chKey];
+            html += `<a href="${ch.url}">${ch.label}</a><br>`;
+        });
+        html += `</div>`;
+    }
+    infoEl.innerHTML = html;
+}
+
+// Mouse events
+let isDragging = false;
+let mouseDownPos = { x: 0, y: 0 };
+
+renderer.domElement.addEventListener('mousedown', (e) => {
+    isDragging = false;
+    mouseDownPos.x = e.clientX;
+    mouseDownPos.y = e.clientY;
+});
+
+renderer.domElement.addEventListener('mousemove', (e) => {
+    if (Math.abs(e.clientX - mouseDownPos.x) > 3 || Math.abs(e.clientY - mouseDownPos.y) > 3) {
+        isDragging = true;
+    }
+
+    const rect = renderer.domElement.getBoundingClientRect();
+    mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+    const allMeshes = [];
+    meshMap.forEach(meshes => meshes.forEach(m => { if (m.visible && m.material.opacity > 0.3) allMeshes.push(m); }));
+    const intersects = raycaster.intersectObjects(allMeshes);
+
+    const hoverLabel = document.getElementById('hover-label');
+    if (intersects.length > 0) {
+        const normName = intersects[0].object.userData.normName;
+        if (normName !== hoveredMesh) {
+            hoveredMesh = normName;
+            hoverLabel.textContent = prettyName(normName);
+            hoverLabel.classList.add('visible');
+            renderer.domElement.style.cursor = 'pointer';
+        }
+    } else {
+        hoveredMesh = null;
+        hoverLabel.classList.remove('visible');
+        renderer.domElement.style.cursor = 'grab';
+    }
+});
+
+renderer.domElement.addEventListener('click', (e) => {
+    if (isDragging) return;
+
+    const rect = renderer.domElement.getBoundingClientRect();
+    mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+    const allMeshes = [];
+    meshMap.forEach(meshes => meshes.forEach(m => { if (m.visible && m.material.opacity > 0.3) allMeshes.push(m); }));
+    const intersects = raycaster.intersectObjects(allMeshes);
+
+    if (intersects.length > 0) {
+        selectStructure(intersects[0].object.userData.normName);
+    }
+});
+
+// View buttons
+const VIEWS = {
+    'anterior':  { pos: [0, 0.3, 1.8], target: [0, 0.1, 0] },
+    'posterior':  { pos: [0, 0.3, -1.8], target: [0, 0.1, 0] },
+    'lateral-l':  { pos: [-1.8, 0.3, 0], target: [0, 0.1, 0] },
+    'lateral-r':  { pos: [1.8, 0.3, 0], target: [0, 0.1, 0] },
+    'superior':  { pos: [0, 1.8, 0.01], target: [0, 0, 0] },
+    'inferior':  { pos: [0, -1.8, 0.01], target: [0, 0, 0] },
+    'reset':     { pos: [0, 0.4, 1.8], target: [0, 0.1, 0] }
+};
+
+document.querySelectorAll('.view-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const view = VIEWS[btn.dataset.view];
+        if (!view) return;
+        const box = new THREE.Box3().setFromObject(scene);
+        const size = box.getSize(new THREE.Vector3());
+        const scale = Math.max(size.x, size.y, size.z);
+        camera.position.set(
+            view.pos[0] * scale,
+            view.pos[1] * scale,
+            view.pos[2] * scale
+        );
+        controls.target.set(
+            view.target[0] * scale,
+            view.target[1] * scale,
+            view.target[2] * scale
+        );
+        controls.update();
+    });
+});
+
+// Resize
+function onResize() {
+    const rect = container.getBoundingClientRect();
+    camera.aspect = rect.width / rect.height;
+    camera.updateProjectionMatrix();
+    renderer.setSize(rect.width, rect.height);
+}
+window.addEventListener('resize', onResize);
+new ResizeObserver(onResize).observe(container);
+onResize();
+
+// Animate
+function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+}
+animate();
+</script>
+
+<footer style="position:fixed; bottom:0; left:0; right:0; padding:0.3em 1em; font-size:0.7em; color:var(--text-dim); background:var(--bg-surface); border-top:1px solid var(--border); z-index:5;">
+    Anatomy data: <a href="https://lifesciencedb.jp/bp3d/" style="color:var(--accent);">BodyParts3D</a> (CC BY-SA 2.1 JP) · isotopy — isotopyofloops.com
+</footer>
+
+</body>
+</html>
