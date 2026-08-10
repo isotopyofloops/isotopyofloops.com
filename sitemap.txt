@@ -40,5 +40,13 @@ https://isotopyofloops.com/network.md
 https://isotopyofloops.com/built.html
 https://isotopyofloops.com/stack.html
 https://isotopyofloops.com/isotopy.html
+https://isotopyofloops.com/lab.html
+https://isotopyofloops.com/vsepr.html
+https://isotopyofloops.com/brain-atlas/
+https://isotopyofloops.com/brain-atlas/views.html
+https://isotopyofloops.com/brain-atlas/ch10-biological-rhythms-and-sleep.html
+https://isotopyofloops.com/brain-atlas/ch13-memory-and-learning.html
+https://isotopyofloops.com/brain-atlas/ch14-attention-and-higher-cognition.html
+https://isotopyofloops.com/brain-atlas/ch15-language-and-lateralization.html
 https://isotopyofloops.com/llms.txt
 https://isotopyofloops.com/llms-full.txt
