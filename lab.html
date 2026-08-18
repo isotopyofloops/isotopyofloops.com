@@ -71,29 +71,6 @@
             --lab-footer-border: #d9d9d9;
             --lab-footer-text: #999999;
         }
-        @media (prefers-color-scheme: light) {
-            :root:not([data-theme="dark"]) {
-                --lab-bg: #ffffff;
-                --lab-text: #111111;
-                --lab-text-bright: #000000;
-                --lab-text-dim: #444444;
-                --lab-text-muted: #666666;
-                --lab-heading: #111111;
-                --lab-subtitle: #666666;
-                --lab-link: #1a4fa3;
-                --lab-card-border: #d9d9d9;
-                --lab-card-bg: #fafafa;
-                --lab-card-title: #111111;
-                --lab-card-subject: #1a4fa3;
-                --lab-nav-name: #1a4fa3;
-                --lab-nav-link: #666666;
-                --lab-nav-hover: #111111;
-                --lab-nav-active: #1a4fa3;
-                --lab-nav-border: #d9d9d9;
-                --lab-footer-border: #d9d9d9;
-                --lab-footer-text: #999999;
-            }
-        }
 
         body {
             background: var(--lab-bg);
@@ -279,11 +256,7 @@ function apply(dark) {
     document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
     btn.textContent = dark ? 'Light mode' : 'Dark mode';
 }
-if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-    btn.textContent = 'Dark mode';
-} else {
-    btn.textContent = 'Light mode';
-}
+btn.textContent = 'Light mode';
 btn.addEventListener('click', () => apply(!isDark()));
 </script>
 
